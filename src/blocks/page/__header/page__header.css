@@ -1,0 +1,9 @@
+.page__header {
+  margin-bottom: 36.25px;
+}
+
+@media screen and (max-width: 768px) {
+  .page__header {
+    margin-bottom: 38.25px;
+  }
+}

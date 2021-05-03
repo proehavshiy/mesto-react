@@ -1,0 +1,23 @@
+@keyframes appear{
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.page__section {
+  margin: 0 auto;
+  max-width: 880px;
+  animation: appear .3s ease-in-out;
+  animation-fill-mode: both;
+  animation-delay: .6s;
+}
+
+
+@media screen and (max-width: 867px) {
+  .page__section {
+    max-width: 88.125vw;
+  }
+}
