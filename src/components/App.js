@@ -12,25 +12,36 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
+  const [isEditImagePopupOpen, setIsIsEditImagePopupOpen] = React.useState(false);
   //обработчики открытия-закрытия форм
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
   }
   function handleAddPlaceClick() {
-    setIsAddPlacePopupOpen(true)
+    setIsAddPlacePopupOpen(true);
+    setSelectedCard(false);
   }
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
+    setSelectedCard(false);
   }
   function handleClosePopupEditProfile() {
-    setIsEditProfilePopupOpen(false)
+    setIsEditProfilePopupOpen(false);
+    setSelectedCard(false);
   }
   function handleCloseEditAvatar() {
     setIsEditAvatarPopupOpen(false);
+    setSelectedCard(false);
   }
   function handleCloseAddPlace() {
-    setIsAddPlacePopupOpen(false)
+    setIsAddPlacePopupOpen(false);
+    setSelectedCard(false);
   }
+  function handleCloseImage() {
+    setIsIsEditImagePopupOpen(false);
+    setSelectedCard(false);
+  }
+
 
   //получаем инфо о профиле и карточки с сервера
   const [userName, setUserName] = React.useState();
@@ -56,7 +67,16 @@ function App() {
     })
   },[])//[] пустой массив в зависимости, чтобы запрос к Api был 1 раз при первонач рендере
 
+  //открытие-закрытие попапа с картинкой
+  const [selectedCard, setSelectedCard] = React.useState();
+  function handleCardClick(state) {
+    setSelectedCard(state);
+    setIsIsEditImagePopupOpen(true);
+    console.log('state', state)
+    console.log('isEditImagePopupOpen', isEditImagePopupOpen)
 
+  }
+  console.log('selectedCard', selectedCard)
   return (
     <div className="App">
       <div className="page">
@@ -68,7 +88,8 @@ function App() {
        userName={userName}
        userDescription={userDescription}
        userAvatar={userAvatar}
-       cards={cards}/>
+       cards={cards}
+       onCardClick={handleCardClick}/>
        <Footer />
        <PopupWithForm name="change-profile" title="Редактировать профиль" submitText={'Сохранить'} isOpen={isEditProfilePopupOpen} onClose={handleClosePopupEditProfile}>
         <fieldset className="popup__profile-information">
@@ -104,7 +125,7 @@ function App() {
             </section>
           </fieldset>
         </PopupWithForm>
-        <PopupWithImage />
+        <PopupWithImage card={selectedCard} isOpen={isEditImagePopupOpen} onClose={handleCloseImage} />
       </div>
     </div>
   );

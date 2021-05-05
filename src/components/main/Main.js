@@ -1,5 +1,5 @@
 import Card from './Card'
-function Main({onEditProfile, onAddPlace, onEditAvatar, userName, userDescription, userAvatar, cards}) {
+function Main({onEditProfile, onAddPlace, onEditAvatar, userName, userDescription, userAvatar, cards, onCardClick}) {
   return(
     <main className="content">
       <section className="profile page__section page__profile">
@@ -16,7 +16,7 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, userName, userDescriptio
         <button className="profile__add-button page__button add-card-form-open-button" onClick={onAddPlace} type="button" aria-label="Кнопка Добавить карточку" />
       </section>
       <section className="elements page__section">
-        <Card cards={cards}/>
+        <Card cards={cards} onCardClick={onCardClick}/>
       </section>
     </main>
   )
