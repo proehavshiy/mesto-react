@@ -1,17 +1,49 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
 import Header from './header/Header'
 import Main from './main/Main'
 import Footer from './footer/Footer'
 import PopupWithForm from './popup_with_form/PopupWithForm'
 import PopupWithImage from './popup_with_image/popupWithImage'
 
+
 function App() {
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
+  //обработчики открытия форм
+  function handleEditAvatarClick() {
+    setIsEditAvatarPopupOpen(true);
+    //console.log('после клика', isEditAvatarPopupOpen)
+  }
+  function handleAddPlaceClick() {
+    setIsAddPlacePopupOpen(true)
+    //console.log('после клика', isAddPlacePopupOpen)
+  }
+  function handleEditProfileClick() {
+    setIsEditProfilePopupOpen(true);
+    //console.log('после клика', isEditProfilePopupOpen)
+  }
+  function handleClosePopupEditProfile() {
+    setIsEditProfilePopupOpen(false)
+    console.log('кнопка закрытия попапа')
+  }
+  function handleCloseEditAvatar() {
+    setIsEditAvatarPopupOpen(false);
+    console.log('кнопка закрытия попапа')
+  }
+  function handleCloseAddPlace() {
+    setIsAddPlacePopupOpen(false)
+    console.log('кнопка закрытия попапа')
+  }
+
   return (
     <div className="App">
       <div className="page">
        <Header/>
-       <Main />
+       <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} />
        <Footer />
-       <PopupWithForm name="change-profile" title="Редактировать профиль">
+       <PopupWithForm name="change-profile" title="Редактировать профиль" isOpen={isEditProfilePopupOpen} onClose={handleClosePopupEditProfile}>
         <fieldset className="popup__profile-information">
           <section className="popup__input-section">
             <input className="popup__input popup__input_profile-name" type="text" name="profile-name" defaultValue placeholder="Имя" required minLength={2} maxLength={40} />
@@ -23,7 +55,7 @@ function App() {
           </section>
           </fieldset>
         </PopupWithForm>
-        <PopupWithForm name="add-card" title="Новое место">
+        <PopupWithForm name="add-card" title="Новое место" isOpen={isAddPlacePopupOpen} onClose={handleCloseAddPlace}>
           <fieldset className="popup__profile-information">
             <section className="popup__input-section">
               <input className="popup__input popup__input_location-name" type="text" name="location-name" defaultValue placeholder="Название" required minLength={2} maxLength={30} />
@@ -37,7 +69,7 @@ function App() {
         </PopupWithForm>
         <PopupWithForm name="confirm-deletion" title="Вы уверены?">
         </PopupWithForm>
-        <PopupWithForm name="avatar" title="Обновить аватар">
+        <PopupWithForm name="avatar" title="Обновить аватар" isOpen={isEditAvatarPopupOpen} onClose={handleCloseEditAvatar}>
           <fieldset className="popup__profile-information">
             <section className="popup__input-section">
               <input className="popup__input popup__input_image-link" type="url" name="image-link" defaultValue placeholder="Ссылка на картинку" required />
