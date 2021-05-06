@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/static/css/main.cb690942.chunk.css",
+    "main.js": "/static/js/main.0d303be8.chunk.js",
+    "main.js.map": "/static/js/main.0d303be8.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.877f026c.js",
+    "runtime-main.js.map": "/static/js/runtime-main.877f026c.js.map",
+    "static/js/2.e1a81eec.chunk.js": "/static/js/2.e1a81eec.chunk.js",
+    "static/js/2.e1a81eec.chunk.js.map": "/static/js/2.e1a81eec.chunk.js.map",
+    "static/js/3.b59b163b.chunk.js": "/static/js/3.b59b163b.chunk.js",
+    "static/js/3.b59b163b.chunk.js.map": "/static/js/3.b59b163b.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.cb690942.chunk.css.map": "/static/css/main.cb690942.chunk.css.map",
+    "static/js/2.e1a81eec.chunk.js.LICENSE.txt": "/static/js/2.e1a81eec.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/static/media/vector-like-button.5126b6ad.svg",
+    "static/media/Mesto-logo.5f3664ca.svg": "/static/media/Mesto-logo.5f3664ca.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.877f026c.js",
+    "static/js/2.e1a81eec.chunk.js",
+    "static/css/main.cb690942.chunk.css",
+    "static/js/main.0d303be8.chunk.js"
+  ]
+}
