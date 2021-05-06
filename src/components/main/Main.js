@@ -1,4 +1,4 @@
-import Card from './Card'
+import Card from '../card/Card'
 function Main({onEditProfile, onAddPlace, onEditAvatar, userName, userDescription, userAvatar, cards, onCardClick}) {
   return(
     <main className="content">
