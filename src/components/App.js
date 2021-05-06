@@ -26,7 +26,6 @@ function App() {
   //попап с картинкой
   function handleCardClick(state) {
     setSelectedCard(state);
-    //console.log('state', state)
   }
   //console.log('selectedCard', selectedCard)
   //закрытие попапа
@@ -35,6 +34,15 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard(null);
+  }
+  //закрытие по Esc попапов
+  React.useEffect(()=> {
+    document.addEventListener('keyup',closeAllPopups);
+  },[])
+  //колбэк закрытия по крестику и полю вне формы
+  function handleClickClose(evt) {
+    (evt.target.classList.contains('popup_opened') ||
+    evt.target.classList.contains('popup__button-close')) && (closeAllPopups());
   }
 
   //получаем инфо о профиле и карточки с сервера
@@ -51,15 +59,12 @@ function App() {
       setUserDescription(serverData[0].about);
       setUserAvatar(serverData[0].avatar);
       setCards(serverData[1]);
-      //console.log('serverData[0].name', serverData[0].name)
-      //console.log('serverData[0].about', serverData[0].about)
-      //console.log('serverData[0].avatar', serverData[0].avatar)
-      //console.log('serverData[1]', serverData[1])
     })
     .catch(err => {
       console.log("Promise.all - ошибка", err)
     })
   },[])//[] пустой массив в зависимости, чтобы запрос к Api был 1 раз при первонач рендере
+
 
   return (
     <div className="App">
@@ -80,7 +85,7 @@ function App() {
        title="Редактировать профиль"
        submitText={'Сохранить'}
        isOpen={isEditProfilePopupOpen}
-       onClose={closeAllPopups}>
+       onClose={handleClickClose}>
         <fieldset className="popup__profile-information">
           <section className="popup__input-section">
             <input className="popup__input popup__input_profile-name" type="text" name="profile-name"  placeholder="Имя" required minLength={2} maxLength={40} />
@@ -97,7 +102,7 @@ function App() {
         title="Новое место"
         submitText={'Сохранить'}
         isOpen={isAddPlacePopupOpen}
-        onClose={closeAllPopups}>
+        onClose={handleClickClose}>
           <fieldset className="popup__profile-information">
             <section className="popup__input-section">
               <input className="popup__input popup__input_location-name" type="text" name="location-name"  placeholder="Название" required minLength={2} maxLength={30} />
@@ -119,7 +124,7 @@ function App() {
         title="Обновить аватар"
         submitText={'Сохранить'}
         isOpen={isEditAvatarPopupOpen}
-        onClose={closeAllPopups}>
+        onClose={handleClickClose}>
           <fieldset className="popup__profile-information">
             <section className="popup__input-section">
               <input className="popup__input popup__input_image-link" type="url" name="image-link"  placeholder="Ссылка на картинку" required />
@@ -129,7 +134,7 @@ function App() {
         </PopupWithForm>
         <PopupWithImage
         card={selectedCard}
-        onClose={closeAllPopups}
+        onClose={handleClickClose}
         />
       </div>
     </div>
