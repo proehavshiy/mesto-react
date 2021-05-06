@@ -12,36 +12,30 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
-  const [isEditImagePopupOpen, setIsIsEditImagePopupOpen] = React.useState(false);
-  //обработчики открытия-закрытия форм
+  const [selectedCard, setSelectedCard] = React.useState();
+  //обработчики открытия-закрытия попапов с формой
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
   }
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(true);
-    setSelectedCard(false);
   }
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
-    setSelectedCard(false);
   }
-  function handleClosePopupEditProfile() {
+  //попап с картинкой
+  function handleCardClick(state) {
+    setSelectedCard(state);
+    //console.log('state', state)
+  }
+  //console.log('selectedCard', selectedCard)
+  //закрытие попапа
+  function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
-    setSelectedCard(false);
-  }
-  function handleCloseEditAvatar() {
     setIsEditAvatarPopupOpen(false);
-    setSelectedCard(false);
-  }
-  function handleCloseAddPlace() {
     setIsAddPlacePopupOpen(false);
-    setSelectedCard(false);
+    setSelectedCard(null);
   }
-  function handleCloseImage() {
-    setIsIsEditImagePopupOpen(false);
-    setSelectedCard(false);
-  }
-
 
   //получаем инфо о профиле и карточки с сервера
   const [userName, setUserName] = React.useState();
@@ -52,7 +46,7 @@ function App() {
   React.useEffect(()=> {
     apiConnection.getPromiseAll(apiConnection.getUserInfo(), apiConnection.getCards())
     .then(serverData => {
-      console.log("Promise.all - массив результат", serverData)
+      //console.log("Promise.all - массив результат", serverData)
       setUserName(serverData[0].name);
       setUserDescription(serverData[0].about);
       setUserAvatar(serverData[0].avatar);
@@ -67,16 +61,6 @@ function App() {
     })
   },[])//[] пустой массив в зависимости, чтобы запрос к Api был 1 раз при первонач рендере
 
-  //открытие-закрытие попапа с картинкой
-  const [selectedCard, setSelectedCard] = React.useState();
-  function handleCardClick(state) {
-    setSelectedCard(state);
-    setIsIsEditImagePopupOpen(true);
-    console.log('state', state)
-    console.log('isEditImagePopupOpen', isEditImagePopupOpen)
-
-  }
-  console.log('selectedCard', selectedCard)
   return (
     <div className="App">
       <div className="page">
@@ -91,41 +75,62 @@ function App() {
        cards={cards}
        onCardClick={handleCardClick}/>
        <Footer />
-       <PopupWithForm name="change-profile" title="Редактировать профиль" submitText={'Сохранить'} isOpen={isEditProfilePopupOpen} onClose={handleClosePopupEditProfile}>
+       <PopupWithForm
+       name="change-profile"
+       title="Редактировать профиль"
+       submitText={'Сохранить'}
+       isOpen={isEditProfilePopupOpen}
+       onClose={closeAllPopups}>
         <fieldset className="popup__profile-information">
           <section className="popup__input-section">
-            <input className="popup__input popup__input_profile-name" type="text" name="profile-name" defaultValue placeholder="Имя" required minLength={2} maxLength={40} />
+            <input className="popup__input popup__input_profile-name" type="text" name="profile-name"  placeholder="Имя" required minLength={2} maxLength={40} />
             <span className="popup__input-error popup__input-error_type_profile-name" />
           </section>
           <section className="popup__input-section">
-            <input className="popup__input popup__input_profile-signing" type="text" name="profile-signing" defaultValue placeholder="Подпись" required minLength={2} maxLength={200} />
+            <input className="popup__input popup__input_profile-signing" type="text" name="profile-signing"  placeholder="Подпись" required minLength={2} maxLength={200} />
             <span className="popup__input-error popup__input-error_type_profile-signing" />
           </section>
           </fieldset>
         </PopupWithForm>
-        <PopupWithForm name="add-card" title="Новое место" submitText={'Сохранить'} isOpen={isAddPlacePopupOpen} onClose={handleCloseAddPlace}>
+        <PopupWithForm
+        name="add-card"
+        title="Новое место"
+        submitText={'Сохранить'}
+        isOpen={isAddPlacePopupOpen}
+        onClose={closeAllPopups}>
           <fieldset className="popup__profile-information">
             <section className="popup__input-section">
-              <input className="popup__input popup__input_location-name" type="text" name="location-name" defaultValue placeholder="Название" required minLength={2} maxLength={30} />
+              <input className="popup__input popup__input_location-name" type="text" name="location-name"  placeholder="Название" required minLength={2} maxLength={30} />
               <span className="popup__input-error popup__input-error_type_location-name" />
             </section>
             <section className="popup__input-section">
-              <input className="popup__input popup__input_image-link" type="url" name="image-link" defaultValue placeholder="Ссылка на картинку" required />
+              <input className="popup__input popup__input_image-link" type="url" name="image-link"  placeholder="Ссылка на картинку" required />
               <span className="popup__input-error popup__input-error_type_image-link" />
             </section>
             </fieldset>
         </PopupWithForm>
-        <PopupWithForm name="confirm-deletion" title="Вы уверены?" submitText={'Да'}>
+        <PopupWithForm
+        name="confirm-deletion"
+        title="Вы уверены?"
+        submitText={'Да'}>
         </PopupWithForm>
-        <PopupWithForm name="avatar" title="Обновить аватар" submitText={'Сохранить'} isOpen={isEditAvatarPopupOpen} onClose={handleCloseEditAvatar}>
+        <PopupWithForm
+        name="avatar"
+        title="Обновить аватар"
+        submitText={'Сохранить'}
+        isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopups}>
           <fieldset className="popup__profile-information">
             <section className="popup__input-section">
-              <input className="popup__input popup__input_image-link" type="url" name="image-link" defaultValue placeholder="Ссылка на картинку" required />
+              <input className="popup__input popup__input_image-link" type="url" name="image-link"  placeholder="Ссылка на картинку" required />
               <span className="popup__input-error popup__input-error_type_image-link" />
             </section>
           </fieldset>
         </PopupWithForm>
-        <PopupWithImage card={selectedCard} isOpen={isEditImagePopupOpen} onClose={handleCloseImage} />
+        <PopupWithImage
+        card={selectedCard}
+        onClose={closeAllPopups}
+        />
       </div>
     </div>
   );
