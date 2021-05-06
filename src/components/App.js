@@ -3,7 +3,7 @@ import Header from './header/Header'
 import Main from './main/Main'
 import Footer from './footer/Footer'
 import PopupWithForm from './popup_with_form/PopupWithForm'
-import PopupWithImage from './popup_with_image/popupWithImage'
+import ImagePopup from './popup_with_image/popupWithImage'
 import apiConnection from '../utils/api'
 
 
@@ -132,7 +132,7 @@ function App() {
             </section>
           </fieldset>
         </PopupWithForm>
-        <PopupWithImage
+        <ImagePopup
         card={selectedCard}
         onClose={handleClickClose}
         />

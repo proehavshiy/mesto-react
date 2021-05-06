@@ -1,4 +1,4 @@
-function PopupWithImage({card, onClose}) {
+function ImagePopup({card, onClose}) {
   const togglePopupState = card ?'popup__flexed popup_opened' : 'popup__flexed';
   return(
     <div className={`popup popup_open-image ${togglePopupState}`} onClick={onClose}>
@@ -18,5 +18,5 @@ function PopupWithImage({card, onClose}) {
     </div>
   )
 }
-export default PopupWithImage;
+export default ImagePopup;
 
