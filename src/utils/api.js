@@ -5,11 +5,18 @@ class Api {
     this._cohort = cohort; // cohort-22
     this._token = token; // a039ff03-9c34-4fce-91e0-77cd409474e3
   }
-  //метод для единого вызова методов серверных запросов
-  getPromiseAll(...requests) {
-    const promises = [...requests]
-    //console.log("Promise.all - массив изначальный",promises);
-    return Promise.all(promises)
+  ////метод для единого вызова методов серверных запросов
+  //getPromiseAll(...requests) {
+  //  const promises = [...requests]
+  //  //console.log("Promise.all - массив изначальный",promises);
+  //  return Promise.all(promises)
+  //}
+  //проверка метода
+  _checkResponse(response) {
+    if(response.ok) {
+      return response.json();
+    }
+    return Promise.reject(`Ошибка ${response.status}`)
   }
   //запрос информации профиля с сервера
   getUserInfo() {
@@ -17,12 +24,7 @@ class Api {
       headers: {
         authorization: this._token
       }
-    }).then(response => {
-      if(response.ok) {
-        return response.json();
-      }
-      return Promise.reject(`Ошибка ${response.status}`)
-    });
+    }).then(this._checkResponse);
   }
   //запрос карточек с сервера
   getCards() {
@@ -30,12 +32,7 @@ class Api {
       headers: {
         authorization: this._token
       }
-    }).then(response => {
-      if(response.ok) {
-        return response.json();
-      }
-      return Promise.reject(`Ошибка ${response.status}`)
-    });
+    }).then(this._checkResponse);
   }
   //отправка на сервер новых данных пользователя
   //Метод PATCH обычно используют для обновления сущностей, уже существующих на сервере
@@ -51,12 +48,7 @@ class Api {
         about: newAbout
       })
     })
-    .then(response => {
-      if(response.ok) {
-        return response.json();
-      }
-      return Promise.reject(`ошибка ${response.status}`)
-    })
+    .then(this._checkResponse);
   }
   //добавление новой карточки на сервер
   sendNewCard({ name, link }) {
@@ -71,12 +63,7 @@ class Api {
         link: link //ссылка на картинку
       })
     })
-    .then(response => {
-      if(response.ok) {
-        return response.json();
-      }
-      return Promise.reject(`ошибка ${response.status}`)
-    })
+    .then(this._checkResponse);
   }
   //добавление новой карточки на сервер
   deleteCard(cardId) {
@@ -93,12 +80,7 @@ class Api {
         _id: cardId
       })
     })
-    .then(response => {
-      if(response.ok) {
-        return response.json();
-      }
-      return Promise.reject(`ошибка ${response.status}`)
-    })
+    .then(this._checkResponse);
   }
   //добавить лайк карточки
   addLikeCard({ cardId, likes }) {
@@ -113,12 +95,7 @@ class Api {
         likes: likes
       })
     })
-    .then(response => {
-      if(response.ok) {
-        return response.json();
-      }
-      return Promise.reject(`ошибка ${response.status}`)
-    })
+    .then(this._checkResponse);
   }
   deleteLikeCard({ cardId, likes }) {
     return fetch(`${this._serverUrl}/${this._cohort}/cards/likes/${cardId}`, {
@@ -132,12 +109,7 @@ class Api {
         likes: likes
       })
     })
-    .then(response => {
-      if(response.ok) {
-        return response.json();
-      }
-      return Promise.reject(`ошибка ${response.status}`)
-    })
+    .then(this._checkResponse);
   }
   //Обновление аватара пользователя
   sendUserAvatar({ newAvatarLink }) {
@@ -151,19 +123,14 @@ class Api {
         avatar: newAvatarLink
       })
     })
-    .then(response => {
-      if(response.ok) {
-        return response.json();
-      }
-      return Promise.reject(`ошибка ${response.status}`)
-    })
+    .then(this._checkResponse);
   }
 }
 
-const apiConnection = new Api({
+const api = new Api({
   serverUrl: 'https://mesto.nomoreparties.co/v1',
   cohort: 'cohort-22',
   token: 'a039ff03-9c34-4fce-91e0-77cd409474e3'
 })
 
-export default apiConnection;
+export default api;
