@@ -39,8 +39,9 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
         <button className="profile__add-button page__button add-card-form-open-button" onClick={onAddPlace} type="button" aria-label="Кнопка Добавить карточку" />
       </section>
       <section className="elements page__section">
-      {cards.map((card) => (
-        <Card key={card._id} card={card} onCardClick={onCardClick} />)
+      {cards.map(({ _id, ...card }) => (
+        <Card key={_id} card={card} onCardClick={onCardClick} />
+        )
       )}
       </section>
     </main>
