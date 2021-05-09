@@ -5,8 +5,9 @@ function PopupWithForm({name, title, submitText, isOpen, onClose, children}) {
 
   //закрытие по крестику и по клику вне формы
   function handleClickClose(evt) {
-    (evt.target.classList.contains('popup_opened') ||
-    evt.target.classList.contains('popup__button-close')) && (onClose());
+    if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__button-close')) {
+      onClose()
+    }
   }
   //закрытие по Esc попапов
   React.useEffect(()=> {

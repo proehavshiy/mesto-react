@@ -5,8 +5,9 @@ function ImagePopup({card, onClose}) {
 
   //закрытие по крестику и по клику вне формы
   function handleClickClose(evt) {
-    (evt.target.classList.contains('popup_opened') ||
-    evt.target.classList.contains('popup__button-close')) && (onClose());
+    if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__button-close')) {
+      onClose()
+    }
   }
   //закрытие по Esc попапов
   React.useEffect(()=> {
@@ -26,9 +27,12 @@ function ImagePopup({card, onClose}) {
   return(
     <div className={`popup popup_open-image ${togglePopupState}`} onClick={handleClickClose}>
       <div className="popup__container popup__container_open-image">
-          <button className="popup__button-close popup__button-close_open-image page__button"  type="button" aria-label="закрыть изображение" />
+          {card ? (
+            <button className="popup__button-close popup__button-close_open-image page__button"  type="button" aria-label="закрыть изображение" />
+            ) : ('')
+          }
           <figure className="popup__figure">
-            <img className="popup__image" src={card ? card.link : ''} alt={`картинка: ${card ? card.name : ''}`} />
+            <img className="popup__image" src={card ? card.link : ''} alt={card ? `картинка: ${card.name}` : ''} />
             <figcaption className="popup__figcaption">
               {card ? card.name : ''}
             </figcaption>

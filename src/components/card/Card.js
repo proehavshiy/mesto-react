@@ -1,9 +1,12 @@
 import React from 'react';
 
 function Card({card, onCardClick}) {
+  function handleClick() {
+    onCardClick(card);
+  }
   return(
       <figure className="element">
-        <img className="element__image" src={card.link} alt={card.name} onClick={()=>{onCardClick(card)}} />
+        <img className="element__image" src={card.link} alt={card.name} onClick={handleClick} />
         <button className="element__button-delete page__button" type="button" aria-label="Удалить карточку" />
         <figcaption className="element__figcaption">
           <h2 className="element__card-title">
