@@ -1,31 +1,12 @@
 import React from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 
-import api from '../../utils/api';
 import Card from '../card/Card';
 
 function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
   //подписка на контекст
-  const {name, about, avatar, _id } = React.useContext(CurrentUserContext);
-
-  //получаем инфо о профиле и карточки с сервера
-  //const [userName, setUserName] = React.useState(null);
-  //const [userDescription, setUserDescription ] = React.useState(null);
-  //const [userAvatar, setUserAvatar] = React.useState(null);
-  const [cards, setCards] = React.useState([]);
-
-  React.useEffect(()=> {
-    Promise.all([api.getUserInfo(), api.getCards()])
-    .then(([userData, cardData]) => {
-      //setUserName(userData.name);
-      //setUserDescription(userData.about);
-      //setUserAvatar(userData.avatar);
-      setCards(cardData);
-    })
-    .catch(err => {
-      console.log("Ошибка получения данных:", err)
-    })
-  },[])//[] пустой массив в зависимости, чтобы запрос к Api был 1 раз при первонач рендере
+  const { name, about, avatar } = React.useContext(CurrentUserContext)[0];
+  const cards = React.useContext(CurrentUserContext)[1];
 
   return(
     <main className="content">
@@ -49,8 +30,7 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
       )}
       </section>
     </main>
-
-
   )
 }
 export default Main;
+

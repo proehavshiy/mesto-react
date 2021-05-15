@@ -37,22 +37,18 @@ function App() {
     setSelectedCard(null);
   }
 
-  //Создайте стейт currentUser в корневом компоненте
-  const [currentUser, setCurrentUser] = React.useState({
-    //задаем дефолтный шаблон, чтобы в Main при деструктуризации не было ошибки (пока данные по api не пришли)
-    about: '',
-    avatar: '',
-    cohort:'',
-    name: '',
-    _id:''
-  });
-  //проверяем статус получения данных. Если false, не рендерим Main
+  //стейт для юзеринфо
+  const [currentUser, setCurrentUser] = React.useState(null);
+  //проверяем статус получения данных. Если false, не рендерим Main и Footer
   const [isUserDataReceived, setIsUserDataReceived] = React.useState(false);
+  //стейт для карточек
+  const [cards, setCards] = React.useState([]);
 
   React.useEffect(()=> {
     Promise.all([api.getUserInfo(), api.getCards()])
     .then(([userData, cardData]) => {
       setCurrentUser(userData);
+      setCards(cardData);
       setIsUserDataReceived(true);
     })
     .catch(err => {
@@ -60,8 +56,10 @@ function App() {
     })
   },[])
 
+  console.log('selectedCard', selectedCard)
+
   return (
-    <CurrentUserContext.Provider value={currentUser}>
+    <CurrentUserContext.Provider value={[ currentUser, cards ]}>
       <div className="App">
         <div className="page">
          <Header/>
