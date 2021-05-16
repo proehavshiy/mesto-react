@@ -125,6 +125,22 @@ class Api {
     })
     .then(this._checkResponse);
   }
+
+  changeLikeCardStatus(cardID, like) {
+    return fetch(`${this._serverUrl}/${this._cohort}/cards/likes/${cardID}`, {
+      method: like ? 'PUT' : 'DELETE',
+      headers: {
+        authorization: this._token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        cardID: cardID,
+        like: like
+      })
+    })
+      .then(this._checkResponse)
+  }
+
 }
 
 const api = new Api({

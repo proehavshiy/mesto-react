@@ -42,13 +42,14 @@ function App() {
   //проверяем статус получения данных. Если false, не рендерим Main и Footer
   const [isUserDataReceived, setIsUserDataReceived] = React.useState(false);
   //стейт для карточек
-  const [cards, setCards] = React.useState([]);
+  //const [cards, setCards] = React.useState([]);
 
   React.useEffect(()=> {
     Promise.all([api.getUserInfo(), api.getCards()])
     .then(([userData, cardData]) => {
       setCurrentUser(userData);
-      setCards(cardData);
+      //setCards(cardData);
+      //console.log('cardData App',cardData[0])
       setIsUserDataReceived(true);
     })
     .catch(err => {
@@ -56,10 +57,10 @@ function App() {
     })
   },[])
 
-  console.log('selectedCard', selectedCard)
+  //console.log('selectedCard', selectedCard)
 
   return (
-    <CurrentUserContext.Provider value={[ currentUser, cards ]}>
+    <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         <div className="page">
          <Header/>
