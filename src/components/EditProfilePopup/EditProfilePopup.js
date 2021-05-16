@@ -3,7 +3,7 @@ import CurrentUserContext from '../../contexts/CurrentUserContext';
 
 import PopupWithForm from '../popup_with_form/PopupWithForm';
 
-function EditProfilePopup({ isOpen, onClose }) {
+function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   //подписка на контекст
   const currentUser = React.useContext(CurrentUserContext);
 
@@ -30,13 +30,25 @@ function EditProfilePopup({ isOpen, onClose }) {
   //console.log('name - EditProfilePopup:', name)
   //console.log('description - EditProfilePopup:', description)
 
+  //обработчик формы
+  function handleSubmit(evt) {
+    evt.preventDefault();
+
+    // Передаём значения управляемых компонентов во внешний обработчик
+    onUpdateUser({
+      name: name,
+      about: description,
+    });
+  }
+
   return (
     <PopupWithForm
       name="change-profile"
       title="Редактировать профиль"
       submitText={'Сохранить'}
       isOpen={isOpen}
-      onClose={onClose}>
+      onClose={onClose}
+      onSubmit={handleSubmit}>
       <fieldset className="popup__profile-information">
         <section className="popup__input-section">
           <input className="popup__input popup__input_profile-name" value={name} onChange={handleChangeName} type="text" name="profile-name"  placeholder="Имя" required minLength={2} maxLength={40} />

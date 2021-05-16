@@ -36,7 +36,7 @@ class Api {
   }
   //отправка на сервер новых данных пользователя
   //Метод PATCH обычно используют для обновления сущностей, уже существующих на сервере
-  sendUserInfo({ newName, newAbout }) {
+  sendUserInfo({ name, about }) {
     return fetch(`${this._serverUrl}/${this._cohort}/users/me`, {
       method: 'PATCH',
       headers: {
@@ -44,8 +44,8 @@ class Api {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        name: newName,
-        about: newAbout
+        name: name,
+        about: about
       })
     })
     .then(this._checkResponse);

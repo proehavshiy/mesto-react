@@ -50,7 +50,7 @@ function App() {
     .then(([userData, cardData]) => {
       setCurrentUser(userData);
       //setCards(cardData);
-      //console.log('cardData App',cardData[0])
+      //console.log('userData',userData)
       setIsUserDataReceived(true);
     })
     .catch(err => {
@@ -59,6 +59,18 @@ function App() {
   },[])
 
   //console.log('selectedCard', selectedCard)
+
+  //обновление данных пользователя новыми данными из формы редактирования профиля
+  function handleUpdateUser(newUserData) {
+    api.sendUserInfo(newUserData)
+    .then((newUserDataFromServer) => {
+      //обновляем контекст стейт currentUser после редактирования формы
+      setCurrentUser(newUserDataFromServer)
+    })
+    .catch(err => {
+      console.log("Ошибка получения данных:", err)
+    })
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -73,7 +85,10 @@ function App() {
               onEditAvatar={handleEditAvatarClick}
               onCardClick={handleCardClick}/>
             <Footer />
-            <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
+            <EditProfilePopup
+            isOpen={isEditProfilePopupOpen}
+            onClose={closeAllPopups}
+            onUpdateUser={handleUpdateUser}/>
            </>
          ) : (
            console.log('ожидание получения данных')
