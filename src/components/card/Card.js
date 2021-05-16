@@ -24,7 +24,7 @@ const isLiked = card.likes.some(item => {
 });
 
 // Создаём переменную, которую после зададим в `className` для кнопки лайка
-const cardLikeButtonClassName = `...`;
+const cardLikeButtonClassName = `button-like_active`;
 
 //console.log('cardowner', card.owner._id)
 //console.log('isOwn', isOwn)
@@ -41,7 +41,7 @@ return (
       {card.name}
       </h2>
       <div className="element__like-section">
-        <button className="element__button-like page__button" type="button" onClick={handleLikeClick} />
+        <button className={`element__button-like page__button ${isLiked ? (cardLikeButtonClassName) : ('')}`} type="button" onClick={handleLikeClick} />
         <p className="element__like-counter">
         {card.likes.length}
         </p>

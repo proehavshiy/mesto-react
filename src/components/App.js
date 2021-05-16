@@ -3,11 +3,12 @@ import React, { useState } from 'react';
 import api from '../utils/api';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 
-import Header from './header/Header'
-import Main from './main/Main'
-import Footer from './footer/Footer'
-import PopupWithForm from './popup_with_form/PopupWithForm'
-import ImagePopup from './popup_with_image/ImagePopup'
+import Header from './header/Header';
+import Main from './main/Main';
+import Footer from './footer/Footer';
+import PopupWithForm from './popup_with_form/PopupWithForm';
+import ImagePopup from './popup_with_image/ImagePopup';
+import EditProfilePopup from './EditProfilePopup/EditProfilePopup';
 
 function App() {
 
@@ -72,27 +73,12 @@ function App() {
               onEditAvatar={handleEditAvatarClick}
               onCardClick={handleCardClick}/>
             <Footer />
+            <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
            </>
          ) : (
            console.log('ожидание получения данных')
          )}
-         <PopupWithForm
-         name="change-profile"
-         title="Редактировать профиль"
-         submitText={'Сохранить'}
-         isOpen={isEditProfilePopupOpen}
-         onClose={closeAllPopups}>
-          <fieldset className="popup__profile-information">
-            <section className="popup__input-section">
-              <input className="popup__input popup__input_profile-name" type="text" name="profile-name"  placeholder="Имя" required minLength={2} maxLength={40} />
-              <span className="popup__input-error popup__input-error_type_profile-name" />
-            </section>
-            <section className="popup__input-section">
-              <input className="popup__input popup__input_profile-signing" type="text" name="profile-signing"  placeholder="Подпись" required minLength={2} maxLength={200} />
-              <span className="popup__input-error popup__input-error_type_profile-signing" />
-            </section>
-            </fieldset>
-          </PopupWithForm>
+
           <PopupWithForm
           name="add-card"
           title="Новое место"

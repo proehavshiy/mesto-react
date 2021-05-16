@@ -14,35 +14,33 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
     api.getCards()
     .then((cardData) => {
       setCards(cardData);
-      //console.log('cardData Main',cardData[0])
     })
     .catch((err) => {
       console.log("ошибка получения данных", err)
     })
   },[])
 
-  console.log('cards main', cards)
+  //console.log('cards main', cards)
 
-  function handleCardLike(card) {
-    // Снова проверяем, есть ли уже лайк на этой карточке
-    const isLiked = card.likes.some(like => like._id === _id);
-    //console.log('card._id', card.likes._id)
-    // Отправляем запрос в API и получаем обновлённые данные карточки
-    api.changeLikeCardStatus(card._id, !isLiked)
-    .then((newCard) => {
-      //ЭТОТ КОД НЕ ПОНЯЛ ПОКА. И НЕ УВЕРЕН ЧТО РАБОТАЕТ, РАЗОБРАТЬСЯ И ПРОВЕРИТЬ, КОГДА АПИ ЗАРАБОТАЕТ
-        setCards(
-          (state) => {
-          //console.log(state);
-          //массив карточек уже полученный => каждая карточка._id если равен Id лайкнутой карточке, то получаем новый массив карточек.
-          //если нет, то оставляем старый
-          //возможно, что такая логика, но я еще не уверен. И что за state такой? по идее это должно быть стейт cards
-          state.map((c) => c._id === card._id ? newCard : c)
-          }
-        );
+  function handleCardLike(activatedCard) {
+    //проверяем, есть ли уже лайк на этой карточке
+    const isLiked = activatedCard.likes.some(like => like._id === _id);
+
+    //Отправляем запрос в API и получаем обновлённые данные карточки
+    api.changeLikeCardStatus(activatedCard._id, !isLiked)
+    .then((updatedCard) => {
+      //обновляем массив карточек cards для рендеринга с новым кол-вом лайков
+      setCards(() => {
+        //в изначальном массиве перебираем через map карточки
+        //если находим лайкнутую, обновляем ее
+        //если находим нелайкнутую, не обновляем ее
+        return (cards.map( (card) => {
+          return (card._id === activatedCard._id ? updatedCard : card)
+        }))
+      })
     })
     .catch((err) => {
-      console.log("ошибка получения данных", err)
+      console.log("ошибка лайка", err)
     });
   }
 
