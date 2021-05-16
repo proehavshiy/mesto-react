@@ -10,6 +10,7 @@ import PopupWithForm from './popup_with_form/PopupWithForm';
 import ImagePopup from './popup_with_image/ImagePopup';
 import EditProfilePopup from './EditProfilePopup/EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup/EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup/AddPlacePopup';
 
 function App() {
 
@@ -44,13 +45,13 @@ function App() {
   //проверяем статус получения данных. Если false, не рендерим Main и Footer
   const [isUserDataReceived, setIsUserDataReceived] = React.useState(false);
   //стейт для карточек
-  //const [cards, setCards] = React.useState([]);
+  const [cards, setCards] = React.useState([]);
 
   React.useEffect(()=> {
     Promise.all([api.getUserInfo(), api.getCards()])
     .then(([userData, cardData]) => {
       setCurrentUser(userData);
-      //setCards(cardData);
+      setCards(cardData);
       //console.log('userData',userData)
       setIsUserDataReceived(true);
     })
@@ -85,6 +86,57 @@ function App() {
     })
   }
 
+  //колбэк лайка карточки
+  function handleCardLike(activatedCard) {
+    //проверяем, есть ли уже лайк на этой карточке
+    const isLiked = activatedCard.likes.some(like => like._id === currentUser._id);
+
+    //Отправляем запрос в API и получаем обновлённые данные карточки
+    api.changeLikeCardStatus(activatedCard._id, !isLiked)
+    .then((updatedCard) => {
+      //обновляем массив карточек cards для рендеринга с новым кол-вом лайков
+      setCards(() => {
+        //в изначальном массиве перебираем через map карточки
+        //если находим лайкнутую, обновляем ее
+        //если находим нелайкнутую, не обновляем ее
+        return (cards.map( (card) => {
+          return (card._id === activatedCard._id ? updatedCard : card)
+        }))
+      })
+    })
+    .catch((err) => {
+      console.log("ошибка лайка", err)
+    });
+  }
+
+  //колбэк удаления карточки
+  function handleCardDelete(card) {
+    api.deleteCard(card._id)
+    .then(
+      //после удаления карточки в стейт Cards записываем новый массив оставшихся карточек
+      setCards(
+        cards.filter(item => {
+          //возвращаем только те карточки, которые не совпадают по id с удаленной
+          return item._id !== card._id
+      }))
+    )
+    .catch((err) => {
+      console.log("ошибка получения данных", err)
+    });
+  }
+
+  //добавление новой карточки
+  function handleAddPlace(newCardData) {
+    api.sendNewCard(newCardData)
+    .then((newCardFromServer) => {
+      //в стейт Cards дозаписываем новую только что созданную карточку
+      setCards([newCardFromServer, ...cards])
+    })
+    .catch(err => {
+      console.log("Ошибка получения данных:", err)
+    })
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
@@ -93,41 +145,32 @@ function App() {
          {isUserDataReceived ? (
            <>
             <Main
+              cards={cards}
               onEditProfile={handleEditProfileClick}
               onAddPlace={handleAddPlaceClick}
               onEditAvatar={handleEditAvatarClick}
-              onCardClick={handleCardClick}/>
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}/>
             <Footer />
             <EditProfilePopup
-            isOpen={isEditProfilePopupOpen}
-            onClose={closeAllPopups}
-            onUpdateUser={handleUpdateUser}/>
+              isOpen={isEditProfilePopupOpen}
+              onClose={closeAllPopups}
+              onUpdateUser={handleUpdateUser}/>
             <EditAvatarPopup
-            isOpen={isEditAvatarPopupOpen}
-            onClose={closeAllPopups}
-            onUpdateAvatar={handleUpdateAvatar}/>
+              isOpen={isEditAvatarPopupOpen}
+              onClose={closeAllPopups}
+              onUpdateAvatar={handleUpdateAvatar}/>
+            <AddPlacePopup
+              isOpen={isAddPlacePopupOpen}
+              onClose={closeAllPopups}
+              onAddPlace={handleAddPlace}/>
            </>
          ) : (
            console.log('ожидание получения данных')
          )}
 
-          <PopupWithForm
-          name="add-card"
-          title="Новое место"
-          submitText={'Сохранить'}
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}>
-            <fieldset className="popup__profile-information">
-              <section className="popup__input-section">
-                <input className="popup__input popup__input_location-name" type="text" name="location-name"  placeholder="Название" required minLength={2} maxLength={30} />
-                <span className="popup__input-error popup__input-error_type_location-name" />
-              </section>
-              <section className="popup__input-section">
-                <input className="popup__input popup__input_image-link" type="url" name="image-link"  placeholder="Ссылка на картинку" required />
-                <span className="popup__input-error popup__input-error_type_image-link" />
-              </section>
-              </fieldset>
-          </PopupWithForm>
+
           <PopupWithForm
           name="confirm-deletion"
           title="Вы уверены?"
