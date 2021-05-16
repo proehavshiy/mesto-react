@@ -112,7 +112,7 @@ class Api {
     .then(this._checkResponse);
   }
   //Обновление аватара пользователя
-  sendUserAvatar({ newAvatarLink }) {
+  sendUserAvatar({ avatar }) {
     return fetch(`${this._serverUrl}/${this._cohort}/users/me/avatar`, {
       method: 'PATCH',
       headers: {
@@ -120,7 +120,7 @@ class Api {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        avatar: newAvatarLink
+        avatar: avatar
       })
     })
     .then(this._checkResponse);

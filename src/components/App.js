@@ -9,6 +9,7 @@ import Footer from './footer/Footer';
 import PopupWithForm from './popup_with_form/PopupWithForm';
 import ImagePopup from './popup_with_image/ImagePopup';
 import EditProfilePopup from './EditProfilePopup/EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup/EditAvatarPopup';
 
 function App() {
 
@@ -72,6 +73,18 @@ function App() {
     })
   }
 
+  //обновление аватара новыми данными из формы аватара
+  function handleUpdateAvatar(newUrl) {
+    api.sendUserAvatar(newUrl)
+    .then((newUserDataFromServer) => {
+      //обновляем контекст стейт currentUser после редактирования формы
+      setCurrentUser(newUserDataFromServer);
+    })
+    .catch(err => {
+      console.log("Ошибка получения данных:", err)
+    })
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
@@ -89,6 +102,10 @@ function App() {
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}/>
+            <EditAvatarPopup
+            isOpen={isEditAvatarPopupOpen}
+            onClose={closeAllPopups}
+            onUpdateAvatar={handleUpdateAvatar}/>
            </>
          ) : (
            console.log('ожидание получения данных')
@@ -115,19 +132,6 @@ function App() {
           name="confirm-deletion"
           title="Вы уверены?"
           submitText={'Да'}>
-          </PopupWithForm>
-          <PopupWithForm
-          name="avatar"
-          title="Обновить аватар"
-          submitText={'Сохранить'}
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}>
-            <fieldset className="popup__profile-information">
-              <section className="popup__input-section">
-                <input className="popup__input popup__input_image-link" type="url" name="image-link"  placeholder="Ссылка на картинку" required />
-                <span className="popup__input-error popup__input-error_type_image-link" />
-              </section>
-            </fieldset>
           </PopupWithForm>
           <ImagePopup
           card={selectedCard}
