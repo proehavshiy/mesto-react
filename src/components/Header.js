@@ -1,5 +1,5 @@
 import React from 'react';
-import logoPath from '../../images/Mesto-logo.svg';
+import logoPath from '../images/Mesto-logo.svg';
 
 function Header() {
   return(

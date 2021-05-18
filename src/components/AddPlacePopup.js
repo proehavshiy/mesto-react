@@ -1,29 +1,38 @@
 import React from 'react';
-import PopupWithForm from '../PopupWithForm/PopupWithForm';
+import PopupWithForm from './PopupWithForm';
 
-function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
-  const url = React.useRef('');
+function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+  const [text, setText] = React.useState('');
+  const [link, setLink ] = React.useState('');
 
-  //обработчик формы
-  function handleSubmit(evt) {
-    evt.preventDefault();
+  function handleChangeText(evt) {
+    setText(evt.target.value)
 
-    // Передаём новый url через ref во внешний обработчик
-    onUpdateAvatar({
-      avatar: url.current.value
-    });
-    //после всего - сбрасываю значение рефа, чтобы удалить его из input
-    url.current.value = '';
+    //вызов валидации
+    handleCheckInputValidity(evt.target);
   }
 
-  //валидация инпутов
-  function handleChange(evt){
+  function handleChangeLink(evt) {
     setLink(evt.target.value)
 
     //вызов валидации
     handleCheckInputValidity(evt.target);
   }
-  const [link, setLink] = React.useState('');
+
+  //обработчик формы
+  function handleAddPlaceSubmit(evt) {
+    evt.preventDefault();
+
+    onAddPlace({
+      name: text,
+      link: link
+    })
+    //очищаем поля перед закрытием формы
+    setText('');
+    setLink('');
+  }
+
+  //валидация инпутов
   const [isValidInput, setIsValidInput] = React.useState({
     name: '',
     status: ''
@@ -65,25 +74,31 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
 
   return(
     <PopupWithForm
-      name="avatar"
-      title="Обновить аватар"
+      name="add-card"
+      title="Новое место"
       submitText={'Сохранить'}
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={handleSubmit}
+      onSubmit={handleAddPlaceSubmit}
       //для валидации узнаем, закрыта ли форма + передаем статус сабмита
       handleResetValidation={resetValidation}
       submitButtonState={submitButton}>
       <fieldset className="popup__profile-information">
         <section className="popup__input-section">
-          <input className={`popup__input popup__input_image-link ${isValidInput.name === "image-link" && toggleInput}`} value={link} onChange={handleChange} ref={url} type="url" name="image-link"  placeholder="Ссылка на картинку" required />
+          <input className={`popup__input popup__input_location-name ${isValidInput.name === "location-name" && toggleInput}`} value={text} onChange={handleChangeText} type="text" name="location-name"  placeholder="Название" required minLength={2} maxLength={30} />
+          <span className={`popup__input-error popup__input-error_type_location-name ${isValidInput.name === "location-name" && toggleError}`}>
+            {toggleMessage}
+          </span>
+        </section>
+        <section className="popup__input-section">
+          <input className={`popup__input popup__input_image-link ${isValidInput.name === "image-link" && toggleInput}`} value={link} onChange={handleChangeLink} type="url" name="image-link"  placeholder="Ссылка на картинку" required />
           <span className={`popup__input-error popup__input-error_type_image-link ${isValidInput.name === "image-link" && toggleError}`}>
-          {toggleMessage}
+            {toggleMessage}
           </span>
         </section>
       </fieldset>
-    </PopupWithForm>
+      </PopupWithForm>
   )
 }
 
-export default EditAvatarPopup;
+export default AddPlacePopup;

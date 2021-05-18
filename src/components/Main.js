@@ -1,6 +1,6 @@
 import React from 'react';
-import CurrentUserContext from '../../contexts/CurrentUserContext';
-import Card from '../Card/Card';
+import CurrentUserContext from '../contexts/CurrentUserContext';
+import Card from './Card';
 
 function Main({ cards, onEditProfile, onAddPlace, onEditAvatar, onCardClick, onCardLike, onCardDelete }) {
   //подписка на контекст
