@@ -1,5 +1,5 @@
 import React from 'react';
-import PopupWithForm from '../popup_with_form/PopupWithForm';
+import PopupWithForm from '../PopupWithForm/PopupWithForm';
 
 function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
   const [text, setText] = React.useState('');
@@ -80,6 +80,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleAddPlaceSubmit}
+      //для валидации узнаем, закрыта ли форма + передаем статус сабмита
       handleResetValidation={resetValidation}
       submitButtonState={submitButton}>
       <fieldset className="popup__profile-information">

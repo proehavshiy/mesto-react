@@ -6,8 +6,8 @@ import CurrentUserContext from '../contexts/CurrentUserContext';
 import Header from './header/Header';
 import Main from './main/Main';
 import Footer from './footer/Footer';
-import PopupWithForm from './popup_with_form/PopupWithForm';
-import ImagePopup from './popup_with_image/ImagePopup';
+import PopupWithForm from './PopupWithForm/PopupWithForm';
+import ImagePopup from './ImagePopup/ImagePopup';
 import EditProfilePopup from './EditProfilePopup/EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup/EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup/AddPlacePopup';
@@ -59,8 +59,6 @@ function App() {
       console.log("Ошибка получения данных:", err)
     })
   },[])
-
-  //console.log('selectedCard', selectedCard)
 
   //обновление данных пользователя новыми данными из формы редактирования профиля
   function handleUpdateUser(newUserData) {
@@ -165,21 +163,18 @@ function App() {
               isOpen={isAddPlacePopupOpen}
               onClose={closeAllPopups}
               onAddPlace={handleAddPlace}/>
-           </>
+            <ImagePopup
+              card={selectedCard}
+              onClose={closeAllPopups}/>
+            <PopupWithForm
+              name="confirm-deletion"
+              title="Вы уверены?"
+              submitText={'Да'}>
+            </PopupWithForm>
+          </>
          ) : (
            console.log('ожидание получения данных')
          )}
-
-
-          <PopupWithForm
-          name="confirm-deletion"
-          title="Вы уверены?"
-          submitText={'Да'}>
-          </PopupWithForm>
-          <ImagePopup
-          card={selectedCard}
-          onClose={closeAllPopups}
-          />
         </div>
       </div>
     </CurrentUserContext.Provider>

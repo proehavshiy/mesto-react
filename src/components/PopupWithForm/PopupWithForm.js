@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 
-
 function PopupWithForm({name, title, submitText, isOpen, onClose, onSubmit, handleResetValidation, submitButtonState, children}) {
   const togglePopupState = isOpen ? 'popup__flexed popup_opened' : 'popup__flexed';
 
   //закрытие по крестику, по клику вне формы, по кнопке сабмита
   function handleClickClose(evt) {
-    if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__button-close') || evt.target.classList.contains('popup__button-save')) {
+    if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__button-close') || (evt.target.classList.contains('popup__button-save'))) {
       handleResetValidation()
       onClose()
     }

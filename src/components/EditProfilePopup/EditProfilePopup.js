@@ -1,7 +1,7 @@
 import React from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 
-import PopupWithForm from '../popup_with_form/PopupWithForm';
+import PopupWithForm from '../PopupWithForm/PopupWithForm';
 
 function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   //подписка на контекст
@@ -18,10 +18,6 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
     setDescription(currentUser.about);
     setSubmitButton(false)
   }, [currentUser]);
-
-  //console.log('currentUser - EditProfilePopup:', currentUser)
-  //console.log('name - EditProfilePopup:', name)
-  //console.log('description - EditProfilePopup:', description)
 
   //обработчик формы
   function handleSubmit(evt) {
@@ -96,6 +92,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
+      //для валидации узнаем, закрыта ли форма + передаем статус сабмита
       handleResetValidation={resetValidation}
       submitButtonState={submitButton}>
       <fieldset className="popup__profile-information">

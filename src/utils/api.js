@@ -82,35 +82,7 @@ class Api {
     })
     .then(this._checkResponse);
   }
-  //добавить лайк карточки
-  addLikeCard({ cardId, likes }) {
-    return fetch(`${this._serverUrl}/${this._cohort}/cards/likes/${cardId}`, {
-      method: 'PUT',
-      headers: {
-        authorization: this._token,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        _id: cardId,
-        likes: likes
-      })
-    })
-    .then(this._checkResponse);
-  }
-  deleteLikeCard({ cardId, likes }) {
-    return fetch(`${this._serverUrl}/${this._cohort}/cards/likes/${cardId}`, {
-      method: 'DELETE',
-      headers: {
-        authorization: this._token,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        _id: cardId,
-        likes: likes
-      })
-    })
-    .then(this._checkResponse);
-  }
+
   //Обновление аватара пользователя
   sendUserAvatar({ avatar }) {
     return fetch(`${this._serverUrl}/${this._cohort}/users/me/avatar`, {

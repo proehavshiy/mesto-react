@@ -1,28 +1,10 @@
 import React from 'react';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
-import api from '../../utils/api';
-import Card from '../card/Card';
+import Card from '../Card/Card';
 
 function Main({ cards, onEditProfile, onAddPlace, onEditAvatar, onCardClick, onCardLike, onCardDelete }) {
   //подписка на контекст
-  const { name, about, avatar, _id } = React.useContext(CurrentUserContext);
-  //const cards = React.useContext(CurrentUserContext)[1];
-
-  //const [cards, setCards] = React.useState([]);
-
-  //React.useEffect(()=> {
-  //  api.getCards()
-  //  .then((cardData) => {
-  //    setCards(cardData);
-  //  })
-  //  .catch((err) => {
-  //    console.log("ошибка получения данных", err)
-  //  })
-  //},[])
-
-  //console.log('cards main', cards)
-
-
+  const { name, about, avatar } = React.useContext(CurrentUserContext);
 
   return(
     <main className="content">
