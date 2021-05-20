@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function PopupWithForm({name, title, submitText, isOpen, onClose, onSubmit, children}) {
+function PopupWithForm({name, title, submitText, isOpen, onClose, onSubmit, toggleButtonState, children}) {
   const togglePopupState = isOpen ? 'popup__flexed popup_opened' : 'popup__flexed';
 
   //закрытие по крестику, по клику вне формы, по кнопке сабмита
@@ -35,7 +35,7 @@ function PopupWithForm({name, title, submitText, isOpen, onClose, onSubmit, chil
            {title}
          </h2>
         {children}
-         <button className={`popup__button-save popup__button-save_${name} page__button`} type="submit" value="Отправить на сервер" aria-label="Кнопка Сохранить форму">
+         <button className={`popup__button-save popup__button-save_${name} page__button ${!toggleButtonState && 'popup__button-save_disabled'}`} disabled={!toggleButtonState && true} type="submit" value="Отправить на сервер" aria-label="Кнопка Сохранить форму">
            {submitText}
          </button>
        </form>
