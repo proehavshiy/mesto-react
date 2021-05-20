@@ -3,6 +3,11 @@ import PopupWithForm from './PopupWithForm';
 
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
   const url = React.useRef('');
+  const [link, setLink] = React.useState('');
+
+  function handleChange(evt){
+    setLink(evt.target.value)
+  }
 
   //обработчик формы
   function handleSubmit(evt) {
@@ -16,7 +21,31 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
     url.current.value = '';
   }
 
-  //валидация инпутов
+
+
+  return(
+    <PopupWithForm
+      name="avatar"
+      title="Обновить аватар"
+      submitText={'Сохранить'}
+      isOpen={isOpen}
+      onClose={onClose}
+      onSubmit={handleSubmit}>
+      <fieldset className="popup__profile-information">
+        <section className="popup__input-section">
+          <input className={`popup__input popup__input_image-link`} value={link} onChange={handleChange} ref={url} type="url" name="image-link"  placeholder="Ссылка на картинку" required />
+          <span className={`popup__input-error popup__input-error_type_image-link`}>
+          </span>
+        </section>
+      </fieldset>
+    </PopupWithForm>
+  )
+}
+
+export default EditAvatarPopup;
+
+/*
+//валидация инпутов
   function handleChange(evt){
     setLink(evt.target.value)
 
@@ -62,28 +91,4 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
     });
     setErrorMessage('');
   }
-
-  return(
-    <PopupWithForm
-      name="avatar"
-      title="Обновить аватар"
-      submitText={'Сохранить'}
-      isOpen={isOpen}
-      onClose={onClose}
-      onSubmit={handleSubmit}
-      //для валидации узнаем, закрыта ли форма + передаем статус сабмита
-      handleResetValidation={resetValidation}
-      submitButtonState={submitButton}>
-      <fieldset className="popup__profile-information">
-        <section className="popup__input-section">
-          <input className={`popup__input popup__input_image-link ${isValidInput.name === "image-link" && toggleInput}`} value={link} onChange={handleChange} ref={url} type="url" name="image-link"  placeholder="Ссылка на картинку" required />
-          <span className={`popup__input-error popup__input-error_type_image-link ${isValidInput.name === "image-link" && toggleError}`}>
-          {toggleMessage}
-          </span>
-        </section>
-      </fieldset>
-    </PopupWithForm>
-  )
-}
-
-export default EditAvatarPopup;
+*/

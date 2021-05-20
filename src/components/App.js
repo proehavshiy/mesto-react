@@ -93,14 +93,15 @@ function App() {
     api.changeLikeCardStatus(activatedCard._id, !isLiked)
     .then((updatedCard) => {
       //обновляем массив карточек cards для рендеринга с новым кол-вом лайков
-      setCards(() => {
-        //в изначальном массиве перебираем через map карточки
-        //если находим лайкнутую, обновляем ее
-        //если находим нелайкнутую, не обновляем ее
-        return (cards.map( (card) => {
-          return (card._id === activatedCard._id ? updatedCard : card)
-        }))
-      })
+      setCards((state) => state.map((c) => c._id === activatedCard._id ? updatedCard : c));
+      //setCards((state) => {
+      //  //в изначальном массиве перебираем через map карточки
+      //  //если находим лайкнутую, обновляем ее
+      //  //если находим нелайкнутую, не обновляем ее
+      //  return (state.map( (card) => {
+      //    return (card._id === activatedCard._id ? updatedCard : card)
+      //  }))
+      //})
     })
     .catch((err) => {
       console.log("ошибка лайка", err)
@@ -110,13 +111,16 @@ function App() {
   //колбэк удаления карточки
   function handleCardDelete(card) {
     api.deleteCard(card._id)
-    .then(
+    .then( () => {
+      //оборачиваем setCards в колбек, чтобы удаление карточки со страницы происходило только после возвращения ответа от сервера
       //после удаления карточки в стейт Cards записываем новый массив оставшихся карточек
       setCards(
         cards.filter(item => {
           //возвращаем только те карточки, которые не совпадают по id с удаленной
           return item._id !== card._id
       }))
+    }
+
     )
     .catch((err) => {
       console.log("ошибка получения данных", err)
@@ -137,45 +141,43 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <div className="App">
-        <div className="page">
-         <Header/>
-         {isUserDataReceived ? (
-           <>
-            <Main
-              cards={cards}
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onEditAvatar={handleEditAvatarClick}
-              onCardClick={handleCardClick}
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}/>
-            <Footer />
-            <EditProfilePopup
-              isOpen={isEditProfilePopupOpen}
-              onClose={closeAllPopups}
-              onUpdateUser={handleUpdateUser}/>
-            <EditAvatarPopup
-              isOpen={isEditAvatarPopupOpen}
-              onClose={closeAllPopups}
-              onUpdateAvatar={handleUpdateAvatar}/>
-            <AddPlacePopup
-              isOpen={isAddPlacePopupOpen}
-              onClose={closeAllPopups}
-              onAddPlace={handleAddPlace}/>
-            <ImagePopup
-              card={selectedCard}
-              onClose={closeAllPopups}/>
-            <PopupWithForm
-              name="confirm-deletion"
-              title="Вы уверены?"
-              submitText={'Да'}>
-            </PopupWithForm>
-          </>
-         ) : (
-           console.log('ожидание получения данных')
-         )}
-        </div>
+      <div className="page">
+       <Header/>
+       {isUserDataReceived ? (
+         <>
+          <Main
+            cards={cards}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onEditAvatar={handleEditAvatarClick}
+            onCardClick={handleCardClick}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}/>
+          <Footer />
+          <EditProfilePopup
+            isOpen={isEditProfilePopupOpen}
+            onClose={closeAllPopups}
+            onUpdateUser={handleUpdateUser}/>
+          <EditAvatarPopup
+            isOpen={isEditAvatarPopupOpen}
+            onClose={closeAllPopups}
+            onUpdateAvatar={handleUpdateAvatar}/>
+          <AddPlacePopup
+            isOpen={isAddPlacePopupOpen}
+            onClose={closeAllPopups}
+            onAddPlace={handleAddPlace}/>
+          <ImagePopup
+            card={selectedCard}
+            onClose={closeAllPopups}/>
+          <PopupWithForm
+            name="confirm-deletion"
+            title="Вы уверены?"
+            submitText={'Да'}>
+          </PopupWithForm>
+        </>
+       ) : (
+         console.log('ожидание получения данных')
+       )}
       </div>
     </CurrentUserContext.Provider>
   );
