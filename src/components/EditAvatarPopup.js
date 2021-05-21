@@ -2,12 +2,13 @@ import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
-  const url = React.useRef('');
-  const [link, setLink] = React.useState('');
+  //const url = React.useRef('');
+  const [inputLink, setInputLink] = React.useState('');
 
-  function handleChange(evt){
-    setLink(evt.target.value)
-  }
+  const toggleButtonState = !inputLink.value || !inputLink.value || !inputLink.valid || !inputLink.valid ? false : true;
+  const inputLinkErrorClass = inputLink && !inputLink.valid && 'popup__input_error';
+  const inputLinkErrorCaption = inputLink && !inputLink.valid && 'popup__input-error_active';
+  const inputLinkErrorMessage = inputLink && !inputLink.valid && inputLink.errorMessage;
 
   //обработчик формы
   function handleSubmit(evt) {
@@ -15,12 +16,29 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
 
     // Передаём новый url через ref во внешний обработчик
     onUpdateAvatar({
-      avatar: url.current.value
+      avatar: inputLink.value
     });
-    //после всего - сбрасываю значение рефа, чтобы удалить его из input
-    url.current.value = '';
+    //после всего - сбрасываю значения, чтобы удалить его из input
+    //url.current.value = '';
+    setInputLink({
+      value : '',
+      valid: true,
+      errorMessage: ''
+      })
   }
 
+   //обработчик инпутов
+   function handleUserInput(event) {
+    const name = event.target.name;
+    const value = event.target.value;
+    const valid = event.target.validity.valid;
+    const errorMessage = event.target.validationMessage;
+    setInputLink({
+      value : value,
+      valid: valid,
+      errorMessage: errorMessage
+      })
+    }
 
 
   return(
@@ -30,11 +48,13 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
       submitText={'Сохранить'}
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={handleSubmit}>
+      onSubmit={handleSubmit}
+      toggleButtonState={toggleButtonState}>
       <fieldset className="popup__profile-information">
         <section className="popup__input-section">
-          <input className={`popup__input popup__input_image-link`} value={link} onChange={handleChange} ref={url} type="url" name="image-link"  placeholder="Ссылка на картинку" required />
-          <span className={`popup__input-error popup__input-error_type_image-link`}>
+          <input className={`popup__input popup__input_image-link ${inputLinkErrorClass}`} value={inputLink.value || ''} onChange={handleUserInput} type="url" name="image-link"  placeholder="Ссылка на картинку" required />
+          <span className={`popup__input-error popup__input-error_type_image-link ${inputLinkErrorCaption}`}>
+            {inputLinkErrorMessage}
           </span>
         </section>
       </fieldset>

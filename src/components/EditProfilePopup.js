@@ -8,14 +8,31 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   const currentUser = React.useContext(CurrentUserContext);
 
   //стейт-переменные для управляемых компонентов форм
-  const [name, setName] = React.useState('');
-  const [description, setDescription ] = React.useState('');
+  const [inputName, setInputName] = React.useState('');
+  const [inputDescription, setInputDescription ] = React.useState('');
+
+  const toggleButtonState = !inputName.value || !inputDescription.value || !inputName.valid || !inputDescription.valid ? false : true;
+  const inputNameErrorClass = inputName && !inputName.valid && 'popup__input_error';
+  const inputNameErrorCaption = inputName && !inputName.valid && 'popup__input-error_active';
+  const inputNameErrorMessage = inputName && !inputName.valid && inputName.errorMessage;
+
+  const inputDescriptionErrorClass = inputDescription && !inputDescription.valid && 'popup__input_error';
+  const inputDescriptionErrorCaption = inputDescription && !inputDescription.valid && 'popup__input-error_active';
+  const inputDescriptionErrorMessage = inputDescription && !inputDescription.valid && inputDescription.errorMessage;
 
   // После загрузки текущего пользователя из API
   // его данные будут использованы в управляемых компонентах.
   React.useEffect(() => {
-    setName(currentUser.name);
-    setDescription(currentUser.about);
+    setInputName({
+      value: currentUser.name,
+      valid: true,
+      errorMessage: ''
+    });
+    setInputDescription({
+      value: currentUser.about,
+      valid: true,
+      errorMessage: ''
+    });
   }, [currentUser]);
 
   //обработчик формы
@@ -24,17 +41,32 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
 
     // Передаём значения управляемых компонентов во внешний обработчик
     onUpdateUser({
-      name: name,
-      about: description,
+      name: inputName.value,
+      about: inputDescription.value,
     });
   }
 
-  function handleChangeName(evt) {
-    setName(evt.target.value)
-  }
+  //обработчик инпутов
+  function handleUserInput(event) {
+    const name = event.target.name;
+    const value = event.target.value;
+    const valid = event.target.validity.valid;
+    const errorMessage = event.target.validationMessage;
 
-  function handleChangeDescription(evt) {
-    setDescription(evt.target.value)
+    if (name === "profile-name") {
+      setInputName({
+        value : value,
+        valid: valid,
+        errorMessage: errorMessage
+      })
+    }
+    if (name === "profile-signing") {
+      setInputDescription({
+        value : value,
+        valid: valid,
+        errorMessage: errorMessage
+      })
+    }
   }
 
   return (
@@ -44,16 +76,19 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
       submitText={'Сохранить'}
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={handleSubmit}>
+      onSubmit={handleSubmit}
+      toggleButtonState={toggleButtonState}>
       <fieldset className="popup__profile-information">
         <section className="popup__input-section">
-          <input className={`popup__input popup__input_profile-name`} value={name} onChange={handleChangeName} type="text" name="profile-name"  placeholder="Имя" required minLength={2} maxLength={40} />
-          <span className={`popup__input-error popup__input-error_type_profile-name`}>
+          <input className={`popup__input popup__input_profile-name ${inputNameErrorClass}`} value={inputName.value || ''} onChange={handleUserInput} type="text" name="profile-name"  placeholder="Имя" required minLength={2} maxLength={40} />
+          <span className={`popup__input-error popup__input-error_type_profile-name ${inputNameErrorCaption}`}>
+            {inputNameErrorMessage}
           </span>
         </section>
         <section className="popup__input-section">
-          <input className={`popup__input popup__input_profile-signing`} value={description} onChange={handleChangeDescription} type="text" name="profile-signing"  placeholder="Подпись" required minLength={2} maxLength={200} />
-          <span className={`popup__input-error popup__input-error_type_profile-signing`}>
+          <input className={`popup__input popup__input_profile-signing ${inputDescriptionErrorClass}`} value={inputDescription.value || ''} onChange={handleUserInput} type="text" name="profile-signing"  placeholder="Подпись" required minLength={2} maxLength={200} />
+          <span className={`popup__input-error popup__input-error_type_profile-signing ${inputDescriptionErrorCaption}`}>
+            {inputDescriptionErrorMessage}
           </span>
         </section>
       </fieldset>

@@ -4,8 +4,6 @@ import PopupWithForm from './PopupWithForm';
 function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
   const [inputText, setInputText] = React.useState('');
   const [inputLink, setInputLink] = React.useState('');
-  //const [toggleButtonState, setToggleButtonState] = React.useState('');
-
 
   const toggleButtonState = !inputText.value || !inputLink.value || !inputText.valid || !inputLink.valid ? false : true;
   const inputTextErrorClass = inputText && !inputText.valid && 'popup__input_error';
@@ -15,12 +13,6 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
   const inputLinkErrorClass = inputLink && !inputLink.valid && 'popup__input_error';
   const inputLinkErrorCaption = inputLink && !inputLink.valid && 'popup__input-error_active';
   const inputLinkErrorMessage = inputLink && !inputLink.valid && inputLink.errorMessage;
-
-  //для сброса значений при закрытии формы. если включаю его, не могу карточку отправить. Он данные сбрасывает до того, как отправляется форма
-  //React.useEffect(()=> {
-  //  setInputText('')
-  //  setInputLink('')
-  //},[isOpen]);
 
   //обработчик инпутов
   function handleUserInput(event) {
@@ -35,8 +27,8 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         valid: valid,
         errorMessage: errorMessage
       })
-      console.log('inputText', inputText)
-      console.log('toggleButtonState', toggleButtonState)
+      //console.log('inputText', inputText)
+      //console.log('toggleButtonState', toggleButtonState)
 
     }
     if (name === "image-link") {
@@ -45,9 +37,8 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         valid: valid,
         errorMessage: errorMessage
       })
-      //setToggleButtonState(!inputText.valid || !inputLink.valid ? false : true)
-      console.log('inputLink', inputLink)
-      console.log('toggleButtonState', toggleButtonState)
+      //console.log('inputLink', inputLink)
+      //console.log('toggleButtonState', toggleButtonState)
     }
   }
 
@@ -59,9 +50,10 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       name: inputText.value,
       link: inputLink.value
     })
+    //сбрасываем поля после отправки
+    setInputText('')
+    setInputLink('')
   }
-
-
 
   return(
     <PopupWithForm
@@ -91,3 +83,16 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
 }
 
 export default AddPlacePopup;
+
+/*
+//для сброса значений при закрытии формы. Зависимость от defaultForm
+  // потому что если от isOpen, я не могу добавить карточку. Данные стейтов очищаются раньше, чем отправка происходит
+  //приходится 2 раза сбрасывать
+  //стейт для сброса полей формы к начальному состоянию
+  const [defaultForm, setDefaultForm] = React.useState(false);
+  //React.useEffect(()=> {
+  //  setInputText('')
+  //  setInputLink('')
+  //  setDefaultForm(false)
+  //},[defaultForm]);
+*/
