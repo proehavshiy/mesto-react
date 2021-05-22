@@ -1,31 +1,33 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
-  const [inputText, setInputText] = React.useState('');
-  const [inputLink, setInputLink] = React.useState('');
+function AddPlacePopup({ isOpen, onClose, onAddPlace, submitStatus }) {
+  const [inputText, setInputText] = React.useState({});
+  const [inputLink, setInputLink] = React.useState({});
 
-  const toggleButtonState = !inputText.value || !inputLink.value || !inputText.valid || !inputLink.valid ? false : true;
-  const inputTextErrorClass = inputText && !inputText.valid && 'popup__input_error';
-  const inputTextErrorCaption = inputText && !inputText.valid && 'popup__input-error_active';
-  const inputTextErrorMessage = inputText && !inputText.valid && inputText.errorMessage;
+  const submitButtonState = !inputText.value || !inputLink.value || !inputText.valid || !inputLink.valid ? false : true;
+  const submitButtonText = submitStatus ? 'Сохранить' : 'Добавление...';
 
-  const inputLinkErrorClass = inputLink && !inputLink.valid && 'popup__input_error';
-  const inputLinkErrorCaption = inputLink && !inputLink.valid && 'popup__input-error_active';
-  const inputLinkErrorMessage = inputLink && !inputLink.valid && inputLink.errorMessage;
+  const inputTextErrorClass = inputText.errorMessage && !inputText.valid ? 'popup__input_error' : '';
+  const inputTextErrorCaption = inputText.errorMessage && !inputText.valid ? 'popup__input-error_active' : '';
+  const inputTextErrorMessage = inputText.errorMessage && !inputText.valid ? inputText.errorMessage : '';
+
+  const inputLinkErrorClass = inputLink.errorMessage && !inputLink.valid ? 'popup__input_error'  : '';
+  const inputLinkErrorCaption = inputLink.errorMessage && !inputLink.valid ? 'popup__input-error_active'  : '';
+  const inputLinkErrorMessage = inputLink.errorMessage && !inputLink.valid ? inputLink.errorMessage  : '';
 
   //обработчик инпутов
-  function handleUserInput(event) {
-    const name = event.target.name;
-    const value = event.target.value;
-    const valid = event.target.validity.valid;
-    const errorMessage = event.target.validationMessage;
+  function handleUserInput({ target }) {
+    const name = target.name;
+    const value = target.value;
+    const valid = target.validity.valid;
+    const errorMessage = target.validationMessage;
 
     if (name === "location-name") {
       setInputText({
-        value : value,
-        valid: valid,
-        errorMessage: errorMessage
+        value,
+        valid,
+        errorMessage
       })
       //console.log('inputText', inputText)
       //console.log('toggleButtonState', toggleButtonState)
@@ -33,9 +35,9 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     }
     if (name === "image-link") {
       setInputLink({
-        value : value,
-        valid: valid,
-        errorMessage: errorMessage
+        value,
+        valid,
+        errorMessage
       })
       //console.log('inputLink', inputLink)
       //console.log('toggleButtonState', toggleButtonState)
@@ -59,11 +61,11 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     <PopupWithForm
       name="add-card"
       title="Новое место"
-      submitText={'Сохранить'}
+      submitText={submitButtonText}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleAddPlaceSubmit}
-      toggleButtonState={toggleButtonState}>
+      submitButtonState={submitButtonState}>
       <fieldset className="popup__profile-information">
         <section className="popup__input-section">
           <input className={`popup__input popup__input_location-name ${inputTextErrorClass}`} value={inputText.value || ''} onChange={handleUserInput} type="text" name="location-name"  placeholder="Название" required minLength={2} maxLength={30} />

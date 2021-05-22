@@ -1,0 +1,6 @@
+.spinner__part_two{
+	left:15px;
+	top:19px;
+	animation-delay:0.6s;
+	transform:rotate(-45deg);
+}

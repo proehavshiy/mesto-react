@@ -1,0 +1,6 @@
+.spinner__part_four{
+	right:15px;
+	top:19px;
+	animation-delay:0.9s;
+	transform:rotate(45deg);
+}

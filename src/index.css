@@ -64,3 +64,15 @@
 @import url(./blocks/popup/__button-save/popup__button-save.css);
 @import url(./blocks/popup/__button-save/_disabled/popup__button-save_disabled.css);
 
+/*блок спиннер*/
+@import url(./blocks/spinner/spinner.css);
+@import url(./blocks/spinner/__part/spinner__part.css);
+@import url(./blocks/spinner/__part/spinner__part_one.css);
+@import url(./blocks/spinner/__part/spinner__part_two.css);
+@import url(./blocks/spinner/__part/spinner__part_three.css);
+@import url(./blocks/spinner/__part/spinner__part_four.css);
+@import url(./blocks/spinner/__part/spinner__part_five.css);
+@import url(./blocks/spinner/__part/spinner__part_six.css);
+@import url(./blocks/spinner/__part/spinner__part_seven.css);
+@import url(./blocks/spinner/__part/spinner__part_eight.css);
+

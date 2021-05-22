@@ -9,6 +9,7 @@
   box-sizing: border-box;
   background-image: url(../../../images/vector-like-button.svg);
   background-color: transparent;
+  background-size: 20px 18px;
   border: none;
   background-position: center;
   background-repeat: no-repeat;

@@ -1,20 +1,22 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
+function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, submitStatus }) {
   //const url = React.useRef('');
-  const [inputLink, setInputLink] = React.useState('');
+  const [inputLink, setInputLink] = React.useState({});
 
-  const toggleButtonState = !inputLink.value || !inputLink.value || !inputLink.valid || !inputLink.valid ? false : true;
-  const inputLinkErrorClass = inputLink && !inputLink.valid && 'popup__input_error';
-  const inputLinkErrorCaption = inputLink && !inputLink.valid && 'popup__input-error_active';
-  const inputLinkErrorMessage = inputLink && !inputLink.valid && inputLink.errorMessage;
+  const submitButtonState = !inputLink.value || !inputLink.value || !inputLink.valid || !inputLink.valid ? false : true;
+  const submitButtonText = submitStatus ? 'Сохранить' : 'Сохранение...';
+
+  const inputLinkErrorClass = inputLink.errorMessage && !inputLink.valid ? 'popup__input_error' : '';
+  const inputLinkErrorCaption = inputLink.errorMessage && !inputLink.valid ? 'popup__input-error_active' : '';
+  const inputLinkErrorMessage = inputLink.errorMessage && !inputLink.valid ? inputLink.errorMessage : '';
 
   //обработчик формы
   function handleSubmit(evt) {
     evt.preventDefault();
 
-    // Передаём новый url через ref во внешний обработчик
+    // Передаём новый url во внешний обработчик
     onUpdateAvatar({
       avatar: inputLink.value
     });
@@ -28,15 +30,14 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
   }
 
    //обработчик инпутов
-   function handleUserInput(event) {
-    const name = event.target.name;
-    const value = event.target.value;
-    const valid = event.target.validity.valid;
-    const errorMessage = event.target.validationMessage;
+   function handleUserInput({ target }) {
+    const value = target.value;
+    const valid = target.validity.valid;
+    const errorMessage = target.validationMessage;
     setInputLink({
-      value : value,
-      valid: valid,
-      errorMessage: errorMessage
+      value,
+      valid,
+      errorMessage
       })
     }
 
@@ -45,11 +46,11 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
     <PopupWithForm
       name="avatar"
       title="Обновить аватар"
-      submitText={'Сохранить'}
+      submitText={submitButtonText}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
-      toggleButtonState={toggleButtonState}>
+      submitButtonState={submitButtonState}>
       <fieldset className="popup__profile-information">
         <section className="popup__input-section">
           <input className={`popup__input popup__input_image-link ${inputLinkErrorClass}`} value={inputLink.value || ''} onChange={handleUserInput} type="url" name="image-link"  placeholder="Ссылка на картинку" required />

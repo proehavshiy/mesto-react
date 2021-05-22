@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import api from '../utils/api';
 import CurrentUserContext from '../contexts/CurrentUserContext';
@@ -11,6 +11,7 @@ import ImagePopup from './ImagePopup';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
+import Spinner from './Spinner';
 
 function App() {
 
@@ -46,6 +47,12 @@ function App() {
   const [isUserDataReceived, setIsUserDataReceived] = React.useState(false);
   //стейт для карточек
   const [cards, setCards] = React.useState([]);
+  // submit status
+  const [submitStatus, setSubmitStatus] = React.useState({
+    profile: true,
+    avatar: true,
+    place: true
+  });
 
   React.useEffect(()=> {
     Promise.all([api.getUserInfo(), api.getCards()])
@@ -62,18 +69,38 @@ function App() {
 
   //обновление данных пользователя новыми данными из формы редактирования профиля
   function handleUpdateUser(newUserData) {
+    //submit status в момент ожидания
+    setSubmitStatus({
+      profile: false,
+      avatar: true,
+      place: true
+    });
     api.sendUserInfo(newUserData)
     .then((newUserDataFromServer) => {
       //обновляем контекст стейт currentUser после редактирования формы
-      setCurrentUser(newUserDataFromServer)
+      setCurrentUser(newUserDataFromServer);
     })
     .catch(err => {
       console.log("Ошибка получения данных:", err)
+    })
+    .finally(() => {
+      //submit status в конце
+      setSubmitStatus({
+        profile: true,
+        avatar: true,
+        place: true
+      });
     })
   }
 
   //обновление аватара новыми данными из формы аватара
   function handleUpdateAvatar(newUrl) {
+    //submit status в момент ожидания
+    setSubmitStatus({
+      profile: true,
+      avatar: false,
+      place: true
+    });
     api.sendUserAvatar(newUrl)
     .then((newUserDataFromServer) => {
       //обновляем контекст стейт currentUser после редактирования формы
@@ -81,6 +108,14 @@ function App() {
     })
     .catch(err => {
       console.log("Ошибка получения данных:", err)
+    })
+    .finally(() => {
+      //submit status в конце
+      setSubmitStatus({
+        profile: true,
+        avatar: true,
+        place: true
+      });
     })
   }
 
@@ -129,6 +164,12 @@ function App() {
 
   //добавление новой карточки
   function handleAddPlace(newCardData) {
+    //submit status в момент ожидания
+    setSubmitStatus({
+      profile: true,
+      avatar: true,
+      place: false
+    });
     api.sendNewCard(newCardData)
     .then((newCardFromServer) => {
       //в стейт Cards дозаписываем новую только что созданную карточку
@@ -136,6 +177,14 @@ function App() {
     })
     .catch(err => {
       console.log("Ошибка получения данных:", err)
+    })
+    .finally(() => {
+      //submit status в конце
+      setSubmitStatus({
+        profile: true,
+        avatar: true,
+        place: true
+      });
     })
   }
 
@@ -157,15 +206,18 @@ function App() {
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
-            onUpdateUser={handleUpdateUser}/>
+            onUpdateUser={handleUpdateUser}
+            submitStatus={submitStatus.profile}/>
           <EditAvatarPopup
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
-            onUpdateAvatar={handleUpdateAvatar}/>
+            onUpdateAvatar={handleUpdateAvatar}
+            submitStatus={submitStatus.avatar}/>
           <AddPlacePopup
             isOpen={isAddPlacePopupOpen}
             onClose={closeAllPopups}
-            onAddPlace={handleAddPlace}/>
+            onAddPlace={handleAddPlace}
+            submitStatus={submitStatus.place}/>
           <ImagePopup
             card={selectedCard}
             onClose={closeAllPopups}/>
@@ -176,7 +228,7 @@ function App() {
           </PopupWithForm>
         </>
        ) : (
-         console.log('ожидание получения данных')
+       <Spinner/>
        )}
       </div>
     </CurrentUserContext.Provider>
@@ -184,3 +236,4 @@ function App() {
 }
 
 export default App;
+
