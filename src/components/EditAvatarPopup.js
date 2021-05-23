@@ -8,9 +8,9 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, submitStatus }) {
   const submitButtonState = !inputLink.value || !inputLink.value || !inputLink.valid || !inputLink.valid ? false : true;
   const submitButtonText = submitStatus ? 'Сохранить' : 'Сохранение...';
 
-  const inputLinkErrorClass = inputLink.errorMessage && !inputLink.valid ? 'popup__input_error' : '';
-  const inputLinkErrorCaption = inputLink.errorMessage && !inputLink.valid ? 'popup__input-error_active' : '';
-  const inputLinkErrorMessage = inputLink.errorMessage && !inputLink.valid ? inputLink.errorMessage : '';
+  const inputLinkErrorClass = inputLink.errorMessage ? 'popup__input_error' : '';
+  const inputLinkErrorCaption = inputLink.errorMessage ? 'popup__input-error_active' : '';
+  const inputLinkErrorMessage = inputLink.errorMessage ? inputLink.errorMessage : '';
 
   //обработчик формы
   function handleSubmit(evt) {
@@ -31,16 +31,15 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, submitStatus }) {
 
    //обработчик инпутов
    function handleUserInput({ target }) {
-    const value = target.value;
-    const valid = target.validity.valid;
-    const errorMessage = target.validationMessage;
+    const { value, validity, validationMessage } = target;
+    const valid = validity.valid;
+    const errorMessage = validationMessage;
     setInputLink({
       value,
       valid,
       errorMessage
       })
     }
-
 
   return(
     <PopupWithForm

@@ -8,20 +8,19 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, submitStatus }) {
   const submitButtonState = !inputText.value || !inputLink.value || !inputText.valid || !inputLink.valid ? false : true;
   const submitButtonText = submitStatus ? 'Сохранить' : 'Добавление...';
 
-  const inputTextErrorClass = inputText.errorMessage && !inputText.valid ? 'popup__input_error' : '';
-  const inputTextErrorCaption = inputText.errorMessage && !inputText.valid ? 'popup__input-error_active' : '';
-  const inputTextErrorMessage = inputText.errorMessage && !inputText.valid ? inputText.errorMessage : '';
+  const inputTextErrorClass = inputText.errorMessage ? 'popup__input_error' : '';
+  const inputTextErrorCaption = inputText.errorMessage ? 'popup__input-error_active' : '';
+  const inputTextErrorMessage = inputText.errorMessage ? inputText.errorMessage : '';
 
-  const inputLinkErrorClass = inputLink.errorMessage && !inputLink.valid ? 'popup__input_error'  : '';
-  const inputLinkErrorCaption = inputLink.errorMessage && !inputLink.valid ? 'popup__input-error_active'  : '';
-  const inputLinkErrorMessage = inputLink.errorMessage && !inputLink.valid ? inputLink.errorMessage  : '';
+  const inputLinkErrorClass = inputLink.errorMessage ? 'popup__input_error'  : '';
+  const inputLinkErrorCaption = inputLink.errorMessage ? 'popup__input-error_active'  : '';
+  const inputLinkErrorMessage = inputLink.errorMessage ? inputLink.errorMessage  : '';
 
   //обработчик инпутов
   function handleUserInput({ target }) {
-    const name = target.name;
-    const value = target.value;
-    const valid = target.validity.valid;
-    const errorMessage = target.validationMessage;
+    const { name, value, validity, validationMessage } = target;
+    const valid = validity.valid;
+    const errorMessage = validationMessage;
 
     if (name === "location-name") {
       setInputText({
@@ -53,8 +52,8 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, submitStatus }) {
       link: inputLink.value
     })
     //сбрасываем поля после отправки
-    setInputText('')
-    setInputLink('')
+    setInputText({});
+    setInputLink({});
   }
 
   return(

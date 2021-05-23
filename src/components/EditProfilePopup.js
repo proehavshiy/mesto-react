@@ -13,13 +13,14 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, submitStatus }) {
 
   const submitButtonState = !inputName.value || !inputDescription.value || !inputName.valid || !inputDescription.valid ? false : true;
   const submitButtonText = submitStatus ? 'Сохранить' : 'Сохранение...';
-  const inputNameErrorClass = inputName.errorMessage && !inputName.valid ? 'popup__input_error' : '';
-  const inputNameErrorCaption = inputName.errorMessage && !inputName.valid ? 'popup__input-error_active' : '';
-  const inputNameErrorMessage = inputName.errorMessage && !inputName.valid ? inputName.errorMessage : '';
 
-  const inputDescriptionErrorClass = inputDescription.errorMessage && !inputDescription.valid ? 'popup__input_error' : '';
-  const inputDescriptionErrorCaption = inputDescription.errorMessage && !inputDescription.valid ? 'popup__input-error_active' : '';
-  const inputDescriptionErrorMessage = inputDescription.errorMessage && !inputDescription.valid ? inputDescription.errorMessage : '';
+  const inputNameErrorClass = inputName.errorMessage ? 'popup__input_error' : '';
+  const inputNameErrorCaption = inputName.errorMessage ? 'popup__input-error_active' : '';
+  const inputNameErrorMessage = inputName.errorMessage ? inputName.errorMessage : '';
+
+  const inputDescriptionErrorClass = inputDescription.errorMessage ? 'popup__input_error' : '';
+  const inputDescriptionErrorCaption = inputDescription.errorMessage ? 'popup__input-error_active' : '';
+  const inputDescriptionErrorMessage = inputDescription.errorMessage ? inputDescription.errorMessage : '';
 
   // После загрузки текущего пользователя из API
   // его данные будут использованы в управляемых компонентах.
@@ -49,10 +50,9 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, submitStatus }) {
 
   //обработчик инпутов
   function handleUserInput({ target }) {
-    const name = target.name;
-    const value = target.value;
-    const valid = target.validity.valid;
-    const errorMessage = target.validationMessage;
+    const { name, value, validity, validationMessage } = target;
+    const valid = validity.valid;
+    const errorMessage = validationMessage;
 
     if (name === "profile-name") {
       setInputName({
