@@ -11,7 +11,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isSubmitting }) {
   const inputLinkErrorClass = inputLink.errorMessage ? 'popup__input_error' : '';
   const inputLinkErrorCaption = inputLink.errorMessage ? 'popup__input-error_active' : '';
 
-  //обработчик формы
+  //обработчик формы 
   function handleSubmit(evt) {
     evt.preventDefault();
 
@@ -115,4 +115,5 @@ export default EditAvatarPopup;
     });
     setErrorMessage('');
   }
+  commit mac fjr testing
 */
