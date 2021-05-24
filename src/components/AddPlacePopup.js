@@ -1,45 +1,36 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function AddPlacePopup({ isOpen, onClose, onAddPlace, submitStatus }) {
+function AddPlacePopup({ isOpen, onClose, onAddPlace, isSubmitting }) {
   const [inputText, setInputText] = React.useState({});
   const [inputLink, setInputLink] = React.useState({});
 
   const submitButtonState = !inputText.value || !inputLink.value || !inputText.valid || !inputLink.valid ? false : true;
-  const submitButtonText = submitStatus ? 'Сохранить' : 'Добавление...';
+  const submitButtonText = isSubmitting ? 'Сохранить' : 'Добавление...';
 
   const inputTextErrorClass = inputText.errorMessage ? 'popup__input_error' : '';
   const inputTextErrorCaption = inputText.errorMessage ? 'popup__input-error_active' : '';
-  const inputTextErrorMessage = inputText.errorMessage ? inputText.errorMessage : '';
 
   const inputLinkErrorClass = inputLink.errorMessage ? 'popup__input_error'  : '';
   const inputLinkErrorCaption = inputLink.errorMessage ? 'popup__input-error_active'  : '';
-  const inputLinkErrorMessage = inputLink.errorMessage ? inputLink.errorMessage  : '';
 
   //обработчик инпутов
   function handleUserInput({ target }) {
-    const { name, value, validity, validationMessage } = target;
-    const valid = validity.valid;
-    const errorMessage = validationMessage;
+    const { name, value, validity: { valid }, validationMessage } = target;
 
     if (name === "location-name") {
       setInputText({
         value,
         valid,
-        errorMessage
+        errorMessage: validationMessage
       })
-      //console.log('inputText', inputText)
-      //console.log('toggleButtonState', toggleButtonState)
-
     }
     if (name === "image-link") {
       setInputLink({
         value,
         valid,
-        errorMessage
+        errorMessage: validationMessage
       })
-      //console.log('inputLink', inputLink)
-      //console.log('toggleButtonState', toggleButtonState)
     }
   }
 
@@ -51,10 +42,17 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, submitStatus }) {
       name: inputText.value,
       link: inputLink.value
     })
-    //сбрасываем поля после отправки
-    setInputText({});
-    setInputLink({});
   }
+
+  React.useEffect(() => {
+    //сбрасываем поля после отправки формы
+    //if нужен для того, чтобы в момент ожидания ответа от сервера
+    //кнопка не дизейблилась, и данные инпутов не очищались. так некрасиво
+    if(isSubmitting === true) {
+      setInputText({});
+      setInputLink({});
+    }
+  }, [isSubmitting]);
 
   return(
     <PopupWithForm
@@ -69,13 +67,13 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, submitStatus }) {
         <section className="popup__input-section">
           <input className={`popup__input popup__input_location-name ${inputTextErrorClass}`} value={inputText.value || ''} onChange={handleUserInput} type="text" name="location-name"  placeholder="Название" required minLength={2} maxLength={30} />
           <span className={`popup__input-error popup__input-error_type_location-name ${inputTextErrorCaption}`}>
-            {inputTextErrorMessage}
+            {inputText.errorMessage}
           </span>
         </section>
         <section className="popup__input-section">
           <input className={`popup__input popup__input_image-link ${inputLinkErrorClass}`} value={inputLink.value || ''} onChange={handleUserInput} type="url" name="image-link"  placeholder="Ссылка на картинку" required />
           <span className={`popup__input-error popup__input-error_type_image-link ${inputLinkErrorCaption}`}>
-          {inputLinkErrorMessage}
+          {inputLink.errorMessage}
           </span>
         </section>
       </fieldset>

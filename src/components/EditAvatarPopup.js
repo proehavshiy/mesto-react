@@ -1,16 +1,15 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, submitStatus }) {
+function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isSubmitting }) {
   //const url = React.useRef('');
   const [inputLink, setInputLink] = React.useState({});
 
   const submitButtonState = !inputLink.value || !inputLink.value || !inputLink.valid || !inputLink.valid ? false : true;
-  const submitButtonText = submitStatus ? 'Сохранить' : 'Сохранение...';
+  const submitButtonText = isSubmitting ? 'Сохранить' : 'Сохранение...';
 
   const inputLinkErrorClass = inputLink.errorMessage ? 'popup__input_error' : '';
   const inputLinkErrorCaption = inputLink.errorMessage ? 'popup__input-error_active' : '';
-  const inputLinkErrorMessage = inputLink.errorMessage ? inputLink.errorMessage : '';
 
   //обработчик формы
   function handleSubmit(evt) {
@@ -20,24 +19,29 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, submitStatus }) {
     onUpdateAvatar({
       avatar: inputLink.value
     });
-    //после всего - сбрасываю значения, чтобы удалить его из input
-    //url.current.value = '';
-    setInputLink({
-      value : '',
-      valid: true,
-      errorMessage: ''
-      })
   }
+
+  React.useEffect(() => {
+    //сбрасываем поле после отправки формы
+    //if нужен для того, чтобы в момент ожидания ответа от сервера
+    //кнопка не дизейблилась, и данные инпутов не очищались. так некрасиво
+    if(isSubmitting === true) {
+      setInputLink({
+        value : '',
+        valid: true,
+        errorMessage: ''
+      })
+    }
+  }, [isSubmitting]);
 
    //обработчик инпутов
    function handleUserInput({ target }) {
-    const { value, validity, validationMessage } = target;
-    const valid = validity.valid;
-    const errorMessage = validationMessage;
+    const { value, validity: { valid }, validationMessage } = target;
+
     setInputLink({
       value,
       valid,
-      errorMessage
+      errorMessage: validationMessage
       })
     }
 
@@ -54,7 +58,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, submitStatus }) {
         <section className="popup__input-section">
           <input className={`popup__input popup__input_image-link ${inputLinkErrorClass}`} value={inputLink.value || ''} onChange={handleUserInput} type="url" name="image-link"  placeholder="Ссылка на картинку" required />
           <span className={`popup__input-error popup__input-error_type_image-link ${inputLinkErrorCaption}`}>
-            {inputLinkErrorMessage}
+            {inputLink.errorMessage}
           </span>
         </section>
       </fieldset>

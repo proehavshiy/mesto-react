@@ -3,12 +3,18 @@ import React from 'react';
 function ImagePopup({card, onClose}) {
   const togglePopupState = card ?'popup__flexed popup_opened' : 'popup__flexed';
 
-  //закрытие по крестику и по клику вне формы
-  function handleClickClose(evt) {
-    if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__button-close')) {
+  //закрытие по крестику, по клику вне формы
+  function handleOverlayClose(evt) {
+    if (evt.target === evt.currentTarget) {
       onClose()
     }
   }
+  function handleButtonClose(evt) {
+    if(evt.target === evt.currentTarget) {
+      onClose()
+    }
+  }
+
   //закрытие по Esc попапов
   React.useEffect(()=> {
     if (!card) return;
@@ -25,10 +31,10 @@ function ImagePopup({card, onClose}) {
   },[card, onClose]);
 
   return(
-    <div className={`popup popup_open-image ${togglePopupState}`} onClick={handleClickClose}>
+    <div className={`popup popup_open-image ${togglePopupState}`} onClick={handleOverlayClose}>
       <div className="popup__container popup__container_open-image">
           {card ? (
-            <button className="popup__button-close popup__button-close_open-image page__button"  type="button" aria-label="закрыть изображение" />
+            <button className="popup__button-close popup__button-close_open-image page__button" onClick={handleButtonClose} type="button" aria-label="закрыть изображение" />
             ) : ('')
           }
           <figure className="popup__figure">

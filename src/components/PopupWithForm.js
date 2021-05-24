@@ -3,9 +3,14 @@ import React from 'react';
 function PopupWithForm({name, title, submitText, isOpen, onClose, onSubmit, submitButtonState, children}) {
   const togglePopupState = isOpen ? 'popup__flexed popup_opened' : 'popup__flexed';
 
-  //закрытие по крестику, по клику вне формы, по кнопке сабмита
-  function handleClickClose(evt) {
-    if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__button-close') || (evt.target.classList.contains('popup__button-save'))) {
+  //закрытие по крестику, по клику вне формы
+  function handleOverlayClose(evt) {
+    if (evt.target === evt.currentTarget) {
+      onClose()
+    }
+  }
+  function handleButtonClose(evt) {
+    if(evt.target === evt.currentTarget) {
       onClose()
     }
   }
@@ -27,9 +32,9 @@ function PopupWithForm({name, title, submitText, isOpen, onClose, onSubmit, subm
 
 
   return(
-    <div className={`popup popup_${name} ${togglePopupState}`} onClick={handleClickClose}>
+    <div className={`popup popup_${name} ${togglePopupState}`} onClick={handleOverlayClose}>
      <div className={`popup__container popup__container_form popup__container_${name}`}>
-       <button className={`popup__button-close popup__button-close_${name} page__button`}  aria-label="Кнопка Закрыть форму" type="button" />
+       <button className={`popup__button-close popup__button-close_${name} page__button`} onClick={handleButtonClose} aria-label="Кнопка Закрыть форму" type="button" />
        <form className="popup__form" onSubmit={onSubmit} name={`${name}-form`}  noValidate autoComplete="off">
          <h2 className="popup__heading">
            {title}
@@ -48,7 +53,9 @@ export default PopupWithForm;
 
 
 /*
-if(evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__button-close')) {
-      setDefaultForm(true);
+  function handleClickClose(evt) {
+    if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__button-close') || (evt.target.classList.contains('popup__button-save'))) {
+      onClose()
     }
+  }
 */

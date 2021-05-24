@@ -6,11 +6,11 @@ import CurrentUserContext from '../contexts/CurrentUserContext';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
+import PopupConfirmDeletion from './PopupConfirmDeletion';
 import Spinner from './Spinner';
 
 function App() {
@@ -48,7 +48,7 @@ function App() {
   //стейт для карточек
   const [cards, setCards] = React.useState([]);
   // submit status
-  const [submitStatus, setSubmitStatus] = React.useState({
+  const [isSubmitting, setIsSubmitting] = React.useState({
     profile: true,
     avatar: true,
     place: true
@@ -70,7 +70,7 @@ function App() {
   //обновление данных пользователя новыми данными из формы редактирования профиля
   function handleUpdateUser(newUserData) {
     //submit status в момент ожидания
-    setSubmitStatus({
+    setIsSubmitting({
       profile: false,
       avatar: true,
       place: true
@@ -79,13 +79,14 @@ function App() {
     .then((newUserDataFromServer) => {
       //обновляем контекст стейт currentUser после редактирования формы
       setCurrentUser(newUserDataFromServer);
+      closeAllPopups();
     })
     .catch(err => {
       console.log("Ошибка получения данных:", err)
     })
     .finally(() => {
       //submit status в конце
-      setSubmitStatus({
+      setIsSubmitting({
         profile: true,
         avatar: true,
         place: true
@@ -96,7 +97,7 @@ function App() {
   //обновление аватара новыми данными из формы аватара
   function handleUpdateAvatar(newUrl) {
     //submit status в момент ожидания
-    setSubmitStatus({
+    setIsSubmitting({
       profile: true,
       avatar: false,
       place: true
@@ -105,13 +106,14 @@ function App() {
     .then((newUserDataFromServer) => {
       //обновляем контекст стейт currentUser после редактирования формы
       setCurrentUser(newUserDataFromServer);
+      closeAllPopups();
     })
     .catch(err => {
       console.log("Ошибка получения данных:", err)
     })
     .finally(() => {
       //submit status в конце
-      setSubmitStatus({
+      setIsSubmitting({
         profile: true,
         avatar: true,
         place: true
@@ -165,7 +167,7 @@ function App() {
   //добавление новой карточки
   function handleAddPlace(newCardData) {
     //submit status в момент ожидания
-    setSubmitStatus({
+    setIsSubmitting({
       profile: true,
       avatar: true,
       place: false
@@ -173,14 +175,15 @@ function App() {
     api.sendNewCard(newCardData)
     .then((newCardFromServer) => {
       //в стейт Cards дозаписываем новую только что созданную карточку
-      setCards([newCardFromServer, ...cards])
+      setCards([newCardFromServer, ...cards]);
+      closeAllPopups();
     })
     .catch(err => {
       console.log("Ошибка получения данных:", err)
     })
     .finally(() => {
       //submit status в конце
-      setSubmitStatus({
+      setIsSubmitting({
         profile: true,
         avatar: true,
         place: true
@@ -207,25 +210,21 @@ function App() {
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
-            submitStatus={submitStatus.profile}/>
+            isSubmitting={isSubmitting.profile}/>
           <EditAvatarPopup
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
             onUpdateAvatar={handleUpdateAvatar}
-            submitStatus={submitStatus.avatar}/>
+            isSubmitting={isSubmitting.avatar}/>
           <AddPlacePopup
             isOpen={isAddPlacePopupOpen}
             onClose={closeAllPopups}
             onAddPlace={handleAddPlace}
-            submitStatus={submitStatus.place}/>
+            isSubmitting={isSubmitting.place}/>
           <ImagePopup
             card={selectedCard}
             onClose={closeAllPopups}/>
-          <PopupWithForm
-            name="confirm-deletion"
-            title="Вы уверены?"
-            submitText={'Да'}>
-          </PopupWithForm>
+          <PopupConfirmDeletion />
         </>
        ) : (
        <Spinner/>
