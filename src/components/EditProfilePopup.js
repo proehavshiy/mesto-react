@@ -74,7 +74,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isSubmitting }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
-      submitButtonState={isSubmitting}>
+      submitButtonState={submitButtonState}>
       <fieldset className="popup__profile-information">
         <section className="popup__input-section">
           <input className={`popup__input popup__input_profile-name ${inputNameErrorClass}`} value={inputName.value || ''} onChange={handleUserInput} type="text" name="profile-name"  placeholder="Имя" required minLength={2} maxLength={40} />
