@@ -1,4 +1,5 @@
 import React from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
 import api from '../utils/api';
 import CurrentUserContext from '../contexts/CurrentUserContext';
@@ -191,44 +192,59 @@ function App() {
     })
   }
 
+  const [loggedIn, setIsLoggedIn] = React.useState(true);
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
        <Header/>
-       {isUserDataReceived ? (
-         <>
-          <Main
-            cards={cards}
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onEditAvatar={handleEditAvatarClick}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}/>
-          <Footer />
-          <EditProfilePopup
-            isOpen={isEditProfilePopupOpen}
-            onClose={closeAllPopups}
-            onUpdateUser={handleUpdateUser}
-            isSubmitting={isSubmitting.profile}/>
-          <EditAvatarPopup
-            isOpen={isEditAvatarPopupOpen}
-            onClose={closeAllPopups}
-            onUpdateAvatar={handleUpdateAvatar}
-            isSubmitting={isSubmitting.avatar}/>
-          <AddPlacePopup
-            isOpen={isAddPlacePopupOpen}
-            onClose={closeAllPopups}
-            onAddPlace={handleAddPlace}
-            isSubmitting={isSubmitting.place}/>
-          <ImagePopup
-            card={selectedCard}
-            onClose={closeAllPopups}/>
-          <PopupConfirmDeletion />
-        </>
-       ) : (
-       <Spinner/>
-       )}
+       <Switch>
+        <Route exact path='/'>
+          {loggedIn ? (<Redirect to='/cards' />) : (<Redirect to='/sign-in' />)}
+        </Route>
+        <Route path='/cards'>
+        {isUserDataReceived ? (
+          <>
+           <Main
+             cards={cards}
+             onEditProfile={handleEditProfileClick}
+             onAddPlace={handleAddPlaceClick}
+             onEditAvatar={handleEditAvatarClick}
+             onCardClick={handleCardClick}
+             onCardLike={handleCardLike}
+             onCardDelete={handleCardDelete}/>
+           <Footer />
+           <EditProfilePopup
+             isOpen={isEditProfilePopupOpen}
+             onClose={closeAllPopups}
+             onUpdateUser={handleUpdateUser}
+             isSubmitting={isSubmitting.profile}/>
+           <EditAvatarPopup
+             isOpen={isEditAvatarPopupOpen}
+             onClose={closeAllPopups}
+             onUpdateAvatar={handleUpdateAvatar}
+             isSubmitting={isSubmitting.avatar}/>
+           <AddPlacePopup
+             isOpen={isAddPlacePopupOpen}
+             onClose={closeAllPopups}
+             onAddPlace={handleAddPlace}
+             isSubmitting={isSubmitting.place}/>
+           <ImagePopup
+             card={selectedCard}
+             onClose={closeAllPopups}/>
+           <PopupConfirmDeletion />
+           </>
+        ) : (
+        <Spinner/>
+        )}
+        </Route>
+        <Route path='/sign-up'>
+          <p>sign-up</p>
+        </Route>
+        <Route path='/sign-in'>
+        <p>sign-in</p>
+        </Route>
+        </Switch>
       </div>
     </CurrentUserContext.Provider>
   );
