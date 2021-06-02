@@ -12,6 +12,9 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import PopupConfirmDeletion from './PopupConfirmDeletion';
+import Login from './Login';
+import Register from './Register';
+import ProtectedRoute from './ProtectedRoute';
 import Spinner from './Spinner';
 
 function App() {
@@ -192,18 +195,70 @@ function App() {
     })
   }
 
-  const [loggedIn, setIsLoggedIn] = React.useState(true);
+  const [loggedIn, setIsLoggedIn] = React.useState(false);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
        <Header/>
        <Switch>
-        <Route exact path='/'>
-          {loggedIn ? (<Redirect to='/cards' />) : (<Redirect to='/sign-in' />)}
-        </Route>
-        <Route path='/cards'>
-        {isUserDataReceived ? (
+         {isUserDataReceived ? (
+           <>
+            <ProtectedRoute
+            path='/'
+            loggedIn={loggedIn}
+            cards={cards}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onEditAvatar={handleEditAvatarClick}
+            onCardClick={handleCardClick}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
+            component={Main}/>
+            <EditProfilePopup
+              isOpen={isEditProfilePopupOpen}
+              onClose={closeAllPopups}
+              onUpdateUser={handleUpdateUser}
+              isSubmitting={isSubmitting.profile}/>
+            <EditAvatarPopup
+              isOpen={isEditAvatarPopupOpen}
+              onClose={closeAllPopups}
+              onUpdateAvatar={handleUpdateAvatar}
+              isSubmitting={isSubmitting.avatar}/>
+            <AddPlacePopup
+              isOpen={isAddPlacePopupOpen}
+              onClose={closeAllPopups}
+              onAddPlace={handleAddPlace}
+              isSubmitting={isSubmitting.place}/>
+            <ImagePopup
+              card={selectedCard}
+              onClose={closeAllPopups}/>
+            <PopupConfirmDeletion />
+            <Route path='/sign-up'>
+            <Register
+              isSubmitting={true} />
+            </Route>
+            <Route path='/sign-in'>
+              <Login
+              isSubmitting={true} />
+            </Route>
+            <Footer />
+           </>
+         ) : (
+          <Spinner/>
+         )}
+        </Switch>
+      </div>
+    </CurrentUserContext.Provider>
+  );
+}
+
+export default App;
+
+/*
+{loggedIn ? (<Redirect to='/' />) : (<Redirect to='/sign-in' />)}
+
+{isUserDataReceived ? (
           <>
            <Main
              cards={cards}
@@ -237,18 +292,4 @@ function App() {
         ) : (
         <Spinner/>
         )}
-        </Route>
-        <Route path='/sign-up'>
-          <p>sign-up</p>
-        </Route>
-        <Route path='/sign-in'>
-        <p>sign-in</p>
-        </Route>
-        </Switch>
-      </div>
-    </CurrentUserContext.Provider>
-  );
-}
-
-export default App;
-
+*/
