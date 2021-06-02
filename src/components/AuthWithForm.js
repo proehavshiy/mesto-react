@@ -1,17 +1,17 @@
 import React from 'react';
 
-function PopupWithForm({name, title, submitText, onSubmit, submitButtonState, children}) {
+function AuthWithForm({name, title, submitText, onSubmit, submitButtonState, children}) {
 
 
   return(
-    <div className='popup_auth'>
-     <div className={`popup__container popup__container_form popup__container_${name}`}>
-       <form className="popup__form" onSubmit={onSubmit} name={`${name}-form`}  noValidate autoComplete="off">
-         <h2 className="popup__heading">
+    <div className='authentification'>
+     <div className={`authentification__container authentification__container_${name}`}>
+       <form className="authentification__form" onSubmit={onSubmit} name={`${name}-form`}  noValidate autoComplete="off">
+         <h2 className="authentification__heading">
            {title}
          </h2>
         {children}
-         <button className={`popup__button-save popup__button-save_${name} page__button ${!submitButtonState && 'popup__button-save_disabled'}`} disabled={!submitButtonState} type="submit" value="Отправить на сервер" aria-label="Кнопка Сохранить форму">
+         <button className={`authentification__button-save authentification__button-save_${name} page__button ${!submitButtonState && 'authentification__button-save_disabled'}`} disabled={!submitButtonState} type="submit" value="Отправить на сервер" aria-label="Кнопка Сохранить форму">
            {submitText}
          </button>
        </form>
@@ -20,7 +20,7 @@ function PopupWithForm({name, title, submitText, onSubmit, submitButtonState, ch
   )
 }
 
-export default PopupWithForm;
+export default AuthWithForm;
 
 
 /*

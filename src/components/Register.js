@@ -1,5 +1,5 @@
 import React from 'react';
-import PopupWithForm from './AuthWithForm';
+import AuthWithForm from './AuthWithForm';
 
 function Register({ isSubmitting }) {
   const [inputEmail, setInputEmail] = React.useState({});
@@ -8,11 +8,11 @@ function Register({ isSubmitting }) {
   const submitButtonState = !inputEmail.value || !inputPassword.value || !inputEmail.valid || !inputPassword.valid ? false : true;
   const submitButtonText = isSubmitting ? 'Зарегистрироваться' : 'Регистрация...';
 
-  const inputEmailErrorClass = inputEmail.errorMessage ? 'popup__input_error' : '';
-  const inputEmailErrorCaption = inputEmail.errorMessage ? 'popup__input-error_active' : '';
+  const inputEmailErrorClass = inputEmail.errorMessage ? 'authentification__input_error' : '';
+  const inputEmailErrorCaption = inputEmail.errorMessage ? 'authentification__input-error_active' : '';
 
-  const inputPasswordErrorClass = inputPassword.errorMessage ? 'popup__input_error'  : '';
-  const inputPasswordErrorCaption = inputPassword.errorMessage ? 'popup__input-error_active'  : '';
+  const inputPasswordErrorClass = inputPassword.errorMessage ? 'authentification__input_error'  : '';
+  const inputPasswordErrorCaption = inputPassword.errorMessage ? 'authentification__input-error_active'  : '';
 
   //обработчик инпутов
   function handleUserInput({ target }) {
@@ -57,27 +57,27 @@ function Register({ isSubmitting }) {
   //}, [isSubmitting]);
 
   return(
-    <PopupWithForm
+    <AuthWithForm
       name="register"
       title="Регистрация"
       submitText={submitButtonText}
       onSubmit={handleRegisterSubmit}
       submitButtonState={submitButtonState}>
-      <fieldset className="popup__profile-information">
-        <section className="popup__input-section">
-          <input className={`popup__input popup__input_email ${inputEmailErrorClass}`} value={inputEmail.value || ''} onChange={handleUserInput} type="email" name="email"  placeholder="Email" required minLength={2} maxLength={30} />
-          <span className={`popup__input-error popup__input-error_type_email ${inputEmailErrorCaption}`}>
+      <fieldset className="authentification__profile-information">
+        <section className="authentification__input-section">
+          <input className={`authentification__input authentification__input_email ${inputEmailErrorClass}`} value={inputEmail.value || ''} onChange={handleUserInput} type="email" name="email"  placeholder="Email" required minLength={2} maxLength={30} />
+          <span className={`authentification__input-error authentification__input-error_type_email ${inputEmailErrorCaption}`}>
             {inputEmail.errorMessage}
           </span>
         </section>
-        <section className="popup__input-section">
-          <input className={`popup__input popup__input_password ${inputPasswordErrorClass}`} value={inputPassword.value || ''} onChange={handleUserInput} type="password" name="password"  placeholder="Пароль" required />
-          <span className={`popup__input-error popup__input-error_type_password ${inputPasswordErrorCaption}`}>
+        <section className="authentification__input-section">
+          <input className={`authentification__input authentification__input_password ${inputPasswordErrorClass}`} value={inputPassword.value || ''} onChange={handleUserInput} type="password" name="password"  placeholder="Пароль" required />
+          <span className={`authentification__input-error authentification__input-error_type_password ${inputPasswordErrorCaption}`}>
           {inputPassword.errorMessage}
           </span>
         </section>
       </fieldset>
-      </PopupWithForm>
+      </AuthWithForm>
   )
 }
 
