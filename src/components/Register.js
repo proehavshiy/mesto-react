@@ -1,9 +1,13 @@
 import React from 'react';
 import AuthWithForm from './AuthWithForm';
+import { register } from '../utils/auth';
+import { useHistory } from 'react-router-dom';
 
-function Register({ isSubmitting }) {
+function Register({ isSubmitting, setIsLoggedIn }) {
   const [inputEmail, setInputEmail] = React.useState({});
   const [inputPassword, setInputPassword] = React.useState({});
+  const [popupMessage, setPopupMessage] = React.useState('');
+  const history = useHistory();
 
   const submitButtonState = !inputEmail.value || !inputPassword.value || !inputEmail.valid || !inputPassword.valid ? false : true;
   const submitButtonText = isSubmitting ? 'Зарегистрироваться' : 'Регистрация...';
@@ -35,15 +39,27 @@ function Register({ isSubmitting }) {
   }
 
   //обработчик формы
-  function handleRegisterSubmit(evt) {
+  function handleSubmit(evt) {
     evt.preventDefault();
 
-    console.log(evt)
+    
+    // сюда добавим логику обработки формы регистрации
+    register(inputEmail.value, inputPassword.value)
+    .then(data => {
+      //добавляем успешный месседж для попапа
+      //setPopupMessage('Вы успешно зарегистрировались!')
+      //console.log(popupMessage)
+      
+      //редиректим хуком на страницу логина
+      history.push('/sign-in')
+      
+    })
+    .catch(err => {
+      console.log(err)
+      //setPopupMessage('Что-то пошло не так! Попробуйте ещё раз.')
+      //console.log(popupMessage)
+    })
 
-    //onAddPlace({
-    //  name: inputText.value,
-    //  link: inputLink.value
-    //})
   }
 
   //React.useEffect(() => {
@@ -61,17 +77,18 @@ function Register({ isSubmitting }) {
       name="register"
       title="Регистрация"
       submitText={submitButtonText}
-      onSubmit={handleRegisterSubmit}
-      submitButtonState={submitButtonState}>
+      onSubmit={handleSubmit}
+      submitButtonState={submitButtonState}
+      isRegister={true}>
       <fieldset className="authentification__profile-information">
         <section className="authentification__input-section">
-          <input className={`authentification__input authentification__input_email ${inputEmailErrorClass}`} value={inputEmail.value || ''} onChange={handleUserInput} type="email" name="email"  placeholder="Email" required minLength={2} maxLength={30} />
+          <input className={`authentification__input authentification__input_email ${inputEmailErrorClass}`} value={inputEmail.value || ''} onChange={handleUserInput} type="email" name="email"  placeholder="Email" required minLength={6} maxLength={30} />
           <span className={`authentification__input-error authentification__input-error_type_email ${inputEmailErrorCaption}`}>
             {inputEmail.errorMessage}
           </span>
         </section>
         <section className="authentification__input-section">
-          <input className={`authentification__input authentification__input_password ${inputPasswordErrorClass}`} value={inputPassword.value || ''} onChange={handleUserInput} type="password" name="password"  placeholder="Пароль" required />
+          <input className={`authentification__input authentification__input_password ${inputPasswordErrorClass}`} value={inputPassword.value || ''} onChange={handleUserInput} type="password" name="password"  placeholder="Пароль" required minLength={6} />
           <span className={`authentification__input-error authentification__input-error_type_password ${inputPasswordErrorCaption}`}>
           {inputPassword.errorMessage}
           </span>

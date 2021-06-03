@@ -1,7 +1,9 @@
 import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import api from '../utils/api';
+import { getContent } from '../utils/auth';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 
 import Header from './Header';
@@ -23,6 +25,9 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
+  const [email, setEmail] = React.useState('');
+  const history = useHistory();
+
   //обработчики открытия-закрытия попапов с формой
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -195,12 +200,44 @@ function App() {
     })
   }
 
+  //хук залогинен ли пользователь
   const [loggedIn, setIsLoggedIn] = React.useState(false);
+
+  function tokenCheck(){
+    // если у пользователя есть токен в localStorage, 
+    // эта функция проверит, действующий он или нет
+    if(localStorage.getItem('jwt')){
+      const jwt = localStorage.getItem('jwt');
+      if(jwt){
+        getContent(jwt)
+        .then(res => {
+          if(res){
+            //запишем емейл для подстановки в шапку
+            setEmail(res.data.email)
+            setIsLoggedIn(true);
+            history.push('/');
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      }
+    }
+  }
+  //срабатывание проверки токена и автологина при загрузке страницы
+  React.useEffect(()=>{
+    tokenCheck()
+    console.log('залогонен по токену')
+  },[])
+
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-       <Header/>
+       <Header
+       loggedIn={loggedIn}
+       setIsLoggedIn={setIsLoggedIn}
+       email={email}/>
        <Switch>
          {isUserDataReceived ? (
            <>
@@ -236,11 +273,14 @@ function App() {
             <PopupConfirmDeletion />
             <Route path='/sign-up'>
             <Register
-              isSubmitting={true} />
+              isSubmitting={true}
+              setIsLoggedIn={setIsLoggedIn} />
             </Route>
             <Route path='/sign-in'>
               <Login
-              isSubmitting={true} />
+              isSubmitting={true}
+              setIsLoggedIn={setIsLoggedIn}
+              setEmail={setEmail} />
             </Route>
             <Footer />
            </>
