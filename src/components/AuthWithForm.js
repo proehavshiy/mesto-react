@@ -14,6 +14,9 @@ function AuthWithForm({name, title, submitText, onSubmit, submitButtonState, chi
          <button className={`authentification__button-save authentification__button-save_${name} page__button ${!submitButtonState && 'authentification__button-save_disabled'}`} disabled={!submitButtonState} type="submit" value="Отправить на сервер" aria-label="Кнопка Сохранить форму">
            {submitText}
          </button>
+         <p className='authentification__redirection'>Уже зарегистрированы? 
+           <a className='authentification__link page__button' href='/sign-in'>Войти</a>
+          </p>
        </form>
      </div>
     </div>

@@ -65,13 +65,13 @@ function Login({ isSubmitting }) {
       submitButtonState={submitButtonState}>
       <fieldset className="authentification__profile-information">
         <section className="authentification__input-section">
-          <input className={`authentification__input authentification__input_email ${inputEmailErrorClass}`} value={inputEmail.value || ''} onChange={handleUserInput} type="email" name="email"  placeholder="Email" required minLength={2} maxLength={30} />
+          <input className={`authentification__input authentification__input_email ${inputEmailErrorClass}`} value={inputEmail.value || ''} onChange={handleUserInput} type="email" name="email"  placeholder="Email" required minLength={6} maxLength={30} />
           <span className={`authentification__input-error authentification__input-error_type_email ${inputEmailErrorCaption}`}>
             {inputEmail.errorMessage}
           </span>
         </section>
         <section className="authentification__input-section">
-          <input className={`authentification__input authentification__input_password ${inputPasswordErrorClass}`} value={inputPassword.value || ''} onChange={handleUserInput} type="password" name="password"  placeholder="Пароль" required />
+          <input className={`authentification__input authentification__input_password ${inputPasswordErrorClass}`} value={inputPassword.value || ''} onChange={handleUserInput} type="password" name="password"  placeholder="Пароль" required minLength={6} />
           <span className={`authentification__input-error authentification__input-error_type_password ${inputPasswordErrorCaption}`}>
           {inputPassword.errorMessage}
           </span>
