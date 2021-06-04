@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 function Login({ setIsLoggedIn, setEmail }) {
   const [inputEmail, setInputEmail] = React.useState({});
   const [inputPassword, setInputPassword] = React.useState({});
-  const [popupMessage, setPopupMessage] = React.useState('');
+  
   const [isSubmitting, setIsSubmitting] = React.useState(true);
   const history = useHistory();
 

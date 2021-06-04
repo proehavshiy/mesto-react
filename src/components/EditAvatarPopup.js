@@ -54,15 +54,16 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isSubmitting }) {
       onClose={onClose}
       onSubmit={handleSubmit}
       submitButtonState={submitButtonState}>
-      <fieldset className="popup__profile-information">
-        <section className="popup__input-section">
-          <input className={`popup__input popup__input_image-link ${inputLinkErrorClass}`} value={inputLink.value || ''} onChange={handleUserInput} type="url" name="image-link"  placeholder="Ссылка на картинку" required />
-          <span className={`popup__input-error popup__input-error_type_image-link ${inputLinkErrorCaption}`}>
-            {inputLink.errorMessage}
-          </span>
-        </section>
-      </fieldset>
+        <fieldset className="popup__profile-information">
+          <section className="popup__input-section">
+            <input className={`popup__input popup__input_image-link ${inputLinkErrorClass}`} value={inputLink.value || ''} onChange={handleUserInput} type="url" name="image-link"  placeholder="Ссылка на картинку" required />
+            <span className={`popup__input-error popup__input-error_type_image-link ${inputLinkErrorCaption}`}>
+              {inputLink.errorMessage}
+            </span>
+          </section>
+        </fieldset>
     </PopupWithForm>
+    
   )
 }
 

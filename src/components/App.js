@@ -16,6 +16,7 @@ import AddPlacePopup from './AddPlacePopup';
 import PopupConfirmDeletion from './PopupConfirmDeletion';
 import Login from './Login';
 import Register from './Register';
+import StatusPopup from './StatusPopup';
 import ProtectedRoute from './ProtectedRoute';
 import Spinner from './Spinner';
 
@@ -25,6 +26,8 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
+
+  const [popupStatusMessage, setPopupStatusMessage] = React.useState('');
   const [email, setEmail] = React.useState('');
   const history = useHistory();
 
@@ -48,6 +51,7 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard(null);
+    setPopupStatusMessage('');
   }
 
   //стейт для юзеринфо
@@ -272,7 +276,12 @@ function App() {
               onClose={closeAllPopups}/>
             <PopupConfirmDeletion />
             <Route path='/sign-up'>
-            <Register />
+            <Register
+            setPopupStatusMessage={setPopupStatusMessage}/>
+            <StatusPopup
+            isOpen={popupStatusMessage}
+            onClose={closeAllPopups}
+            popupStatusMessage={popupStatusMessage}/>
             </Route>
             <Route path='/sign-in'>
               <Login

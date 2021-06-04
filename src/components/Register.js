@@ -3,10 +3,9 @@ import AuthWithForm from './AuthWithForm';
 import { register } from '../utils/auth';
 import { useHistory } from 'react-router-dom';
 
-function Register() {
+function Register({ setPopupStatusMessage }) {
   const [inputEmail, setInputEmail] = React.useState({});
   const [inputPassword, setInputPassword] = React.useState({});
-  const [popupMessage, setPopupMessage] = React.useState('');
   const [isSubmitting, setIsSubmitting] = React.useState(true);
   const history = useHistory();
 
@@ -50,17 +49,23 @@ function Register() {
     register(inputEmail.value, inputPassword.value)
     .then(data => {
       //добавляем успешный месседж для попапа
+      setPopupStatusMessage('Вы успешно зарегистрировались!')
+      
       //setPopupMessage('Вы успешно зарегистрировались!')
       //console.log(popupMessage)
       
       //редиректим хуком на страницу логина
-      history.push('/sign-in')
+      //history.push('/sign-in')
       
     })
     .catch(err => {
       console.log(err)
+      setPopupStatusMessage('Что-то пошло не так! Попробуйте ещё раз.')
       //setPopupMessage('Что-то пошло не так! Попробуйте ещё раз.')
       //console.log(popupMessage)
+    })
+    .finally(()=>{
+      setIsSubmitting(true)
     })
 
   }
@@ -97,7 +102,7 @@ function Register() {
           </span>
         </section>
       </fieldset>
-      </AuthWithForm>
+    </AuthWithForm>
   )
 }
 
