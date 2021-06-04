@@ -242,16 +242,16 @@ function App() {
          {isUserDataReceived ? (
            <>
             <ProtectedRoute
-            path='/'
-            loggedIn={loggedIn}
-            cards={cards}
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onEditAvatar={handleEditAvatarClick}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}
-            component={Main}/>
+              path='/'
+              loggedIn={loggedIn}
+              cards={cards}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+              component={Main}/>
             <EditProfilePopup
               isOpen={isEditProfilePopupOpen}
               onClose={closeAllPopups}
@@ -272,13 +272,10 @@ function App() {
               onClose={closeAllPopups}/>
             <PopupConfirmDeletion />
             <Route path='/sign-up'>
-            <Register
-              isSubmitting={true}
-              setIsLoggedIn={setIsLoggedIn} />
+            <Register />
             </Route>
             <Route path='/sign-in'>
               <Login
-              isSubmitting={true}
               setIsLoggedIn={setIsLoggedIn}
               setEmail={setEmail} />
             </Route>

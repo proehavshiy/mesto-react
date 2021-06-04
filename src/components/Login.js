@@ -3,10 +3,11 @@ import AuthWithForm from './AuthWithForm';
 import { login } from '../utils/auth';
 import { useHistory } from 'react-router-dom';
 
-function Login({ isSubmitting, setIsLoggedIn, setEmail }) {
+function Login({ setIsLoggedIn, setEmail }) {
   const [inputEmail, setInputEmail] = React.useState({});
   const [inputPassword, setInputPassword] = React.useState({});
   const [popupMessage, setPopupMessage] = React.useState('');
+  const [isSubmitting, setIsSubmitting] = React.useState(true);
   const history = useHistory();
 
   const submitButtonState = !inputEmail.value || !inputPassword.value || !inputEmail.valid || !inputPassword.valid ? false : true;
@@ -41,6 +42,8 @@ function Login({ isSubmitting, setIsLoggedIn, setEmail }) {
   //обработчик формы
   function handleSubmit(evt) {
     evt.preventDefault();
+    //меняем стейт кнопки на ожидание
+    setIsSubmitting(false)
 
     if (!inputEmail || !inputPassword) {
       return
@@ -55,15 +58,14 @@ function Login({ isSubmitting, setIsLoggedIn, setEmail }) {
       if(data.token) {
         //вход успешен
         setIsLoggedIn(true);
-        //очищаем стейты для экономии памяти
-        setInputEmail({});
-        setInputPassword({});
         //сохраняем токен пользователя в localStorage
         localStorage.setItem('jwt', data.token)
         //запишем емейл для подстановки в шапку, потому что он не подставляется в шапку при входе через логин
         setEmail(inputEmail.value)
         //перенаправляем на главную
         history.push('/')
+        //меняем стейт кнопки // можно и без изменения/ все работает/ хз почему
+        //setIsSubmitting(true)
       }
     })
     .catch(err => {
@@ -71,21 +73,22 @@ function Login({ isSubmitting, setIsLoggedIn, setEmail }) {
       //setPopupMessage('Что-то пошло не так! Попробуйте ещё раз.')
       //console.log(popupMessage)
     })
-    
-
-    //onAddPlace({
-    //  name: inputText.value,
-    //  link: inputLink.value
-    //})
   }
+  
 
   //React.useEffect(() => {
   //  //сбрасываем поля после отправки формы
   //  //if нужен для того, чтобы в момент ожидания ответа от сервера
   //  //кнопка не дизейблилась, и данные инпутов не очищались. так некрасиво
-  //  if(isSubmitting === true) {
-  //    setInputText({});
-  //    setInputLink({});
+  //  if(isSubmitting === false) {
+  //    //очищаем стейты для экономии памяти
+  //    setInputEmail({});
+  //    setInputPassword({});
+  //    console.log('inputEmail', inputEmail)
+  //    console.log('inputPassword', inputPassword)
+  //    console.log('isSubmitting', isSubmitting)
+  //    
+  //    console.log(1)
   //  }
   //}, [isSubmitting]);
 

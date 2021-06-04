@@ -3,10 +3,11 @@ import AuthWithForm from './AuthWithForm';
 import { register } from '../utils/auth';
 import { useHistory } from 'react-router-dom';
 
-function Register({ isSubmitting, setIsLoggedIn }) {
+function Register() {
   const [inputEmail, setInputEmail] = React.useState({});
   const [inputPassword, setInputPassword] = React.useState({});
   const [popupMessage, setPopupMessage] = React.useState('');
+  const [isSubmitting, setIsSubmitting] = React.useState(true);
   const history = useHistory();
 
   const submitButtonState = !inputEmail.value || !inputPassword.value || !inputEmail.valid || !inputPassword.valid ? false : true;
@@ -42,6 +43,8 @@ function Register({ isSubmitting, setIsLoggedIn }) {
   function handleSubmit(evt) {
     evt.preventDefault();
 
+    //меняем стейт кнопки на ожидание
+    setIsSubmitting(false)
     
     // сюда добавим логику обработки формы регистрации
     register(inputEmail.value, inputPassword.value)
