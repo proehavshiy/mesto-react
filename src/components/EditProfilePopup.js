@@ -7,32 +7,37 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isSubmitting }) {
   //подписка на контекст
   const currentUser = React.useContext(CurrentUserContext);
 
-  //стейт-переменные для управляемых компонентов форм
-  const [inputName, setInputName] = React.useState({});
-  const [inputDescription, setInputDescription ] = React.useState({});
+  //стейт-переменная для управляемых компонентов формы
+  const [input, setInput] = React.useState({});
 
-  const submitButtonState = !inputName.value || !inputDescription.value || !inputName.valid || !inputDescription.valid ? false : true;
+  const submitButtonState = !input.name || !input.signing || !input.name.valid || !input.signing.valid ? false : true;
   const submitButtonText = isSubmitting ? 'Сохранить' : 'Сохранение...';
 
-  const inputNameErrorClass = inputName.errorMessage ? 'popup__input_error' : '';
-  const inputNameErrorCaption = inputName.errorMessage ? 'popup__input-error_active' : '';
+  const inputNameErrorClass = !input.name || input.name.errorMessage ? 'authentification__input_error' : '';
+  const inputNameErrorCaption = !input.name || input.name.errorMessage ? 'authentification__input-error_active' : '';
+  const nameErrorMessage = input.name && input.name.errorMessage;
 
-  const inputDescriptionErrorClass = inputDescription.errorMessage ? 'popup__input_error' : '';
-  const inputDescriptionErrorCaption = inputDescription.errorMessage ? 'popup__input-error_active' : '';
+  const inputSigningErrorClass = !input.signing || input.signing.errorMessage ? 'authentification__input_error'  : '';
+  const inputSigningErrorCaption = !input.signing || input.signing.errorMessage ? 'authentification__input-error_active'  : '';
+  const signingErrorMessage = input.signing && input.signing.errorMessage;
 
   // После загрузки текущего пользователя из API
   // его данные будут использованы в управляемых компонентах.
   React.useEffect(() => {
-    setInputName({
-      value: currentUser.name,
-      valid: true,
-      errorMessage: ''
-    });
-    setInputDescription({
-      value: currentUser.about,
-      valid: true,
-      errorMessage: ''
-    });
+    setInput(prevState => ({
+      ...prevState,
+      name: {
+        value: currentUser.name,
+        valid: true,
+        errorMessage: ''
+      },
+      signing: {
+        value: currentUser.about,
+        valid: true,
+        errorMessage: ''
+      }
+      })
+    );
   }, [currentUser]);
 
   //обработчик формы
@@ -41,8 +46,8 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isSubmitting }) {
 
     // Передаём значения управляемых компонентов во внешний обработчик
     onUpdateUser({
-      name: inputName.value,
-      about: inputDescription.value,
+      name: input.name.value,
+      about: input.signing.value,
     });
   }
 
@@ -50,20 +55,14 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isSubmitting }) {
   function handleUserInput({ target }) {
     const { name, value, validity: { valid }, validationMessage } = target;
 
-    if (name === "profile-name") {
-      setInputName({
+    setInput(prevState => ({
+      ...prevState,
+      [name]: {
         value,
         valid,
         errorMessage: validationMessage
-      })
-    }
-    if (name === "profile-signing") {
-      setInputDescription({
-        value,
-        valid,
-        errorMessage: validationMessage
-      })
-    }
+      }
+    }))
   }
 
   return (
@@ -77,15 +76,15 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isSubmitting }) {
       submitButtonState={submitButtonState}>
       <fieldset className="popup__profile-information">
         <section className="popup__input-section">
-          <input className={`popup__input popup__input_profile-name ${inputNameErrorClass}`} value={inputName.value || ''} onChange={handleUserInput} type="text" name="profile-name"  placeholder="Имя" required minLength={2} maxLength={40} />
+          <input className={`popup__input popup__input_profile-name ${inputNameErrorClass}`} value={input.name ? input.name.value : ''} onChange={handleUserInput} type="text" name="name"  placeholder="Имя" required minLength={2} maxLength={40} />
           <span className={`popup__input-error popup__input-error_type_profile-name ${inputNameErrorCaption}`}>
-            {inputName.errorMessage}
+            {nameErrorMessage}
           </span>
         </section>
         <section className="popup__input-section">
-          <input className={`popup__input popup__input_profile-signing ${inputDescriptionErrorClass}`} value={inputDescription.value || ''} onChange={handleUserInput} type="text" name="profile-signing"  placeholder="Подпись" required minLength={2} maxLength={200} />
-          <span className={`popup__input-error popup__input-error_type_profile-signing ${inputDescriptionErrorCaption}`}>
-            {inputDescription.errorMessage}
+          <input className={`popup__input popup__input_profile-signing ${inputSigningErrorClass}`} value={input.signing ? input.signing.value : ''} onChange={handleUserInput} type="text" name="signing"  placeholder="Подпись" required minLength={2} maxLength={200} />
+          <span className={`popup__input-error popup__input-error_type_profile-signing ${inputSigningErrorCaption}`}>
+            {signingErrorMessage}
           </span>
         </section>
       </fieldset>

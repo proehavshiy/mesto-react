@@ -2,36 +2,32 @@ import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
 function AddPlacePopup({ isOpen, onClose, onAddPlace, isSubmitting }) {
-  const [inputText, setInputText] = React.useState({});
-  const [inputLink, setInputLink] = React.useState({});
 
-  const submitButtonState = !inputText.value || !inputLink.value || !inputText.valid || !inputLink.valid ? false : true;
+  const [input, setInput] = React.useState({});
+
+  const submitButtonState = !input.location || !input.link || !input.location.valid || !input.link.valid ? false : true;
   const submitButtonText = isSubmitting ? 'Сохранить' : 'Добавление...';
 
-  const inputTextErrorClass = inputText.errorMessage ? 'popup__input_error' : '';
-  const inputTextErrorCaption = inputText.errorMessage ? 'popup__input-error_active' : '';
+  const inputTextErrorClass = !input.location || input.location.errorMessage ? 'authentification__input_error' : '';
+  const inputTextErrorCaption = !input.location || input.location.errorMessage ? 'authentification__input-error_active' : '';
+  const TextErrorMessage = input.location && input.location.errorMessage;
 
-  const inputLinkErrorClass = inputLink.errorMessage ? 'popup__input_error'  : '';
-  const inputLinkErrorCaption = inputLink.errorMessage ? 'popup__input-error_active'  : '';
+  const inputLinkErrorClass = !input.link || input.link.errorMessage ? 'authentification__input_error'  : '';
+  const inputLinkErrorCaption = !input.link || input.link.errorMessage ? 'authentification__input-error_active'  : '';
+  const LinkErrorMessage = input.link && input.link.errorMessage;
 
   //обработчик инпутов
   function handleUserInput({ target }) {
     const { name, value, validity: { valid }, validationMessage } = target;
 
-    if (name === "location-name") {
-      setInputText({
+    setInput(prevState => ({
+      ...prevState,
+      [name]: {
         value,
         valid,
         errorMessage: validationMessage
-      })
-    }
-    if (name === "image-link") {
-      setInputLink({
-        value,
-        valid,
-        errorMessage: validationMessage
-      })
-    }
+      }
+    }))
   }
 
   //обработчик формы
@@ -39,8 +35,8 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isSubmitting }) {
     evt.preventDefault();
 
     onAddPlace({
-      name: inputText.value,
-      link: inputLink.value
+      name: input.location.value,
+      link: input.link.value
     })
   }
 
@@ -49,8 +45,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isSubmitting }) {
     //if нужен для того, чтобы в момент ожидания ответа от сервера
     //кнопка не дизейблилась, и данные инпутов не очищались. так некрасиво
     if(isSubmitting === true) {
-      setInputText({});
-      setInputLink({});
+      setInput({});
     }
   }, [isSubmitting]);
 
@@ -65,15 +60,15 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isSubmitting }) {
       submitButtonState={submitButtonState}>
       <fieldset className="popup__profile-information">
         <section className="popup__input-section">
-          <input className={`popup__input popup__input_location-name ${inputTextErrorClass}`} value={inputText.value || ''} onChange={handleUserInput} type="text" name="location-name"  placeholder="Название" required minLength={2} maxLength={30} />
+          <input className={`popup__input popup__input_location-name ${inputTextErrorClass}`} value={input.location ? input.location.value : ''} onChange={handleUserInput} type="text" name="location"  placeholder="Название" required minLength={2} maxLength={30} />
           <span className={`popup__input-error popup__input-error_type_location-name ${inputTextErrorCaption}`}>
-            {inputText.errorMessage}
+            {TextErrorMessage}
           </span>
         </section>
         <section className="popup__input-section">
-          <input className={`popup__input popup__input_image-link ${inputLinkErrorClass}`} value={inputLink.value || ''} onChange={handleUserInput} type="url" name="image-link"  placeholder="Ссылка на картинку" required />
+          <input className={`popup__input popup__input_image-link ${inputLinkErrorClass}`} value={input.link ? input.link.value : ''} onChange={handleUserInput} type="url" name="link"  placeholder="Ссылка на картинку" required />
           <span className={`popup__input-error popup__input-error_type_image-link ${inputLinkErrorCaption}`}>
-          {inputLink.errorMessage}
+          {LinkErrorMessage}
           </span>
         </section>
       </fieldset>

@@ -248,7 +248,6 @@ function App() {
       if(!data) {
         //setPopupMessage('Что-то пошло не так! Попробуйте ещё раз.')
       }
-
       if(data.token) {
         //вход успешен
         setIsLoggedIn(true);
@@ -258,8 +257,6 @@ function App() {
         setEmail(email)
         //перенаправляем на главную
         history.push('/')
-        //меняем стейт кнопки // можно и без изменения/ все работает/ хз почему
-        //setIsSubmitting(true)
       }
     })
     .catch(err => {
