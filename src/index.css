@@ -6,7 +6,9 @@
 
 /*блок page*/
 @import url(./blocks/page/page.css);
+@import url(./blocks/page/____block-alignment/page__block-alignment.css);
 @import url(./blocks/page/__section/page__section.css);
+@import url(./blocks/page/__animation/page__animation.css);
 @import url(./blocks/page/__button/page__button.css);
 /*блок content*/
 @import url(./blocks/content/content.css);

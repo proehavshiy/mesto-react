@@ -5,7 +5,7 @@ function AuthWithForm({name, title, submitText, onSubmit, submitButtonState, isR
 
 
   return(
-    <div className='authentification'>
+    <div className='authentification page__block-alignment page__animation'>
      <div className={`authentification__container authentification__container_${name}`}>
        <form className="authentification__form" onSubmit={onSubmit} name={`${name}-form`}  noValidate autoComplete="off">
          <h2 className="authentification__heading">

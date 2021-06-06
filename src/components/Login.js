@@ -1,78 +1,40 @@
 import React from 'react';
 import AuthWithForm from './AuthWithForm';
-import { login } from '../utils/auth';
-import { useHistory } from 'react-router-dom';
 
-function Login({ setIsLoggedIn, setEmail }) {
-  const [inputEmail, setInputEmail] = React.useState({});
-  const [inputPassword, setInputPassword] = React.useState({});
-  
-  const [isSubmitting, setIsSubmitting] = React.useState(true);
-  const history = useHistory();
+function Login({ onLogin, isSubmitting }) {
+  const [input, setInput] = React.useState({});
 
-  const submitButtonState = !inputEmail.value || !inputPassword.value || !inputEmail.valid || !inputPassword.valid ? false : true;
+  const submitButtonState = !input.email || !input.password || !input.email.valid || !input.password.valid ? false : true;
   const submitButtonText = isSubmitting ? 'Войти' : 'Вход...';
 
-  const inputEmailErrorClass = inputEmail.errorMessage ? 'authentification__input_error' : '';
-  const inputEmailErrorCaption = inputEmail.errorMessage ? 'authentification__input-error_active' : '';
+  const inputEmailErrorClass = !input.email || input.email.errorMessage ? 'authentification__input_error' : '';
+  const inputEmailErrorCaption = !input.email || input.email.errorMessage ? 'authentification__input-error_active' : '';
+  const emailErrorMessage = input.email && input.email.errorMessage;
 
-  const inputPasswordErrorClass = inputPassword.errorMessage ? 'authentification__input_error'  : '';
-  const inputPasswordErrorCaption = inputPassword.errorMessage ? 'authentification__input-error_active'  : '';
+  const inputPasswordErrorClass = !input.password || input.password.errorMessage ? 'authentification__input_error'  : '';
+  const inputPasswordErrorCaption = !input.password || input.password.errorMessage ? 'authentification__input-error_active'  : '';
+  const passwordErrorMessage = input.password && input.password.errorMessage;
 
   //обработчик инпутов
   function handleLoginInput({ target }) {
     const { name, value, validity: { valid }, validationMessage } = target;
 
-    if (name === "email") {
-      setInputEmail({
+    setInput(prevState => ({
+      ...prevState,
+      [name]: {
         value,
         valid,
         errorMessage: validationMessage
+      }
       })
-    }
-    if (name === "password") {
-      setInputPassword({
-        value,
-        valid,
-        errorMessage: validationMessage
-      })
-    }
+    )
   }
 
   //обработчик формы
   function handleSubmit(evt) {
     evt.preventDefault();
-    //меняем стейт кнопки на ожидание
-    setIsSubmitting(false)
 
-    if (!inputEmail || !inputPassword) {
-      return
-    }
-
-    login(inputEmail.value, inputPassword.value)
-    .then(data => {
-      if(!data) {
-        //setPopupMessage('Что-то пошло не так! Попробуйте ещё раз.')
-      }
-
-      if(data.token) {
-        //вход успешен
-        setIsLoggedIn(true);
-        //сохраняем токен пользователя в localStorage
-        localStorage.setItem('jwt', data.token)
-        //запишем емейл для подстановки в шапку, потому что он не подставляется в шапку при входе через логин
-        setEmail(inputEmail.value)
-        //перенаправляем на главную
-        history.push('/')
-        //меняем стейт кнопки // можно и без изменения/ все работает/ хз почему
-        //setIsSubmitting(true)
-      }
-    })
-    .catch(err => {
-      console.log(err)
-      //setPopupMessage('Что-то пошло не так! Попробуйте ещё раз.')
-      //console.log(popupMessage)
-    })
+    onLogin(input.email.value, input.password.value)
   }
   
 
@@ -102,6 +64,37 @@ function Login({ setIsLoggedIn, setEmail }) {
       isRegister={false}>
       <fieldset className="authentification__profile-information">
         <section className="authentification__input-section">
+          <input className={`authentification__input authentification__input_email ${inputEmailErrorClass}`} value={input.email ? input.email.value : ''} onChange={handleLoginInput} type="email" name="email"  placeholder="Email" required minLength={6} maxLength={30} />
+          <span className={`authentification__input-error authentification__input-error_type_email ${inputEmailErrorCaption}`}>
+            {emailErrorMessage}
+          </span>
+        </section>
+        <section className="authentification__input-section">
+          <input className={`authentification__input authentification__input_password ${inputPasswordErrorClass}`} value={input.password ? input.password.value : ''} onChange={handleLoginInput} type="password" name="password"  placeholder="Пароль" required minLength={6} />
+          <span className={`authentification__input-error authentification__input-error_type_password ${inputPasswordErrorCaption}`}>
+          {passwordErrorMessage}
+          </span>
+        </section>
+      </fieldset>
+      </AuthWithForm>
+  )
+}
+
+export default Login;
+
+  
+
+/*
+return(
+    <AuthWithForm
+      name="login"
+      title="Вход"
+      submitText={submitButtonText}
+      onSubmit={handleSubmit}
+      submitButtonState={submitButtonState}
+      isRegister={false}>
+      <fieldset className="authentification__profile-information">
+        <section className="authentification__input-section">
           <input className={`authentification__input authentification__input_email ${inputEmailErrorClass}`} value={inputEmail.value || ''} onChange={handleLoginInput} type="email" name="email"  placeholder="Email" required minLength={6} maxLength={30} />
           <span className={`authentification__input-error authentification__input-error_type_email ${inputEmailErrorCaption}`}>
             {inputEmail.errorMessage}
@@ -118,19 +111,4 @@ function Login({ setIsLoggedIn, setEmail }) {
   )
 }
 
-export default Login;
-
-  
-
-/*
-<PopupWithForm
-        name="add-card"
-        title="Новое место"
-        submitText={submitButtonText}
-        isOpen={isOpen}
-        onClose={onClose}
-        onSubmit={handleAddPlaceSubmit}
-        submitButtonState={submitButtonState}>
-        
-        </PopupWithForm>
 */

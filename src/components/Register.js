@@ -1,13 +1,10 @@
 import React from 'react';
 import AuthWithForm from './AuthWithForm';
-import { register } from '../utils/auth';
-import { useHistory } from 'react-router-dom';
 
-function Register({ setPopupStatusMessage }) {
+function Register({ onRegister, isSubmitting }) {
   const [inputEmail, setInputEmail] = React.useState({});
   const [inputPassword, setInputPassword] = React.useState({});
-  const [isSubmitting, setIsSubmitting] = React.useState(true);
-  const history = useHistory();
+
 
   const submitButtonState = !inputEmail.value || !inputPassword.value || !inputEmail.valid || !inputPassword.valid ? false : true;
   const submitButtonText = isSubmitting ? 'Зарегистрироваться' : 'Регистрация...';
@@ -42,31 +39,7 @@ function Register({ setPopupStatusMessage }) {
   function handleSubmit(evt) {
     evt.preventDefault();
 
-    //меняем стейт кнопки на ожидание
-    setIsSubmitting(false)
-    
-    // сюда добавим логику обработки формы регистрации
-    register(inputEmail.value, inputPassword.value)
-    .then(data => {
-      //добавляем успешный месседж для попапа
-      setPopupStatusMessage('Вы успешно зарегистрировались!')
-      
-      //setPopupMessage('Вы успешно зарегистрировались!')
-      //console.log(popupMessage)
-      
-      //редиректим хуком на страницу логина
-      //history.push('/sign-in')
-      
-    })
-    .catch(err => {
-      console.log(err)
-      setPopupStatusMessage('Что-то пошло не так! Попробуйте ещё раз.')
-      //setPopupMessage('Что-то пошло не так! Попробуйте ещё раз.')
-      //console.log(popupMessage)
-    })
-    .finally(()=>{
-      setIsSubmitting(true)
-    })
+    onRegister(inputEmail.value, inputPassword.value)
 
   }
 

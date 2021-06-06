@@ -117,8 +117,8 @@ class Api {
 
 const api = new Api({
   serverUrl: 'https://mesto.nomoreparties.co/v1',
-  cohort: 'cohort-22',
-  token: 'a039ff03-9c34-4fce-91e0-77cd409474e3'
+  cohort: 'cohort-24',
+  token: 'edb7481a-fcf7-4397-94a7-daeb2327e95b'
 })
 
 export default api;

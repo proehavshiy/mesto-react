@@ -7,8 +7,8 @@ function Main({ cards, onEditProfile, onAddPlace, onEditAvatar, onCardClick, onC
   const { name, about, avatar } = React.useContext(CurrentUserContext);
 
   return(
-    <main className="content">
-      <section className="profile page__section page__profile">
+    <main className="content page__block-alignment">
+      <section className="profile page__section page__animation page__profile">
         <div className="profile__avatar avatar-form-open-button" style={{backgroundImage: `url(${avatar})`}} onClick={onEditAvatar}/>
         <div className="profile__info">
           <h1 className="profile__title">
@@ -21,7 +21,7 @@ function Main({ cards, onEditProfile, onAddPlace, onEditAvatar, onCardClick, onC
         </div>
         <button className="profile__add-button page__button add-card-form-open-button" onClick={onAddPlace} type="button" aria-label="Кнопка Добавить карточку" />
       </section>
-      <section className="elements page__section">
+      <section className="elements page__section page__animation">
       {cards.map((card) => (
         <Card key={card._id} card={card} onCardClick={onCardClick} onCardLike={onCardLike} onCardDelete={onCardDelete} />
         )

@@ -2,12 +2,12 @@ import React from 'react';
 import NavBar from './NavBar';
 import logoPath from '../images/Mesto-logo.svg';
 
-function Header({ setIsLoggedIn, email }) {
+function Header({ onSignOut, email }) {
   return(
-    <header className="header page__section page__header">
+    <header className="header page__section page__animation page__animation page__header">
       <img className="logo" src={logoPath} alt="логотип Место" />
       <NavBar 
-      setIsLoggedIn={setIsLoggedIn}
+      onSignOut={onSignOut}
       email={email}/>
     </header>
   )
