@@ -25,6 +25,7 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
+  const [cardForDeletion, setCardForDeletion] = React.useState('');
   const [selectedCard, setSelectedCard] = React.useState(null);
   const [popupStatusMessage, setPopupStatusMessage] = React.useState('');
   const [loggedIn, setIsLoggedIn] = React.useState(false);
@@ -42,7 +43,8 @@ function App() {
     avatar: true,
     place: true,
     login: true,
-    register: true
+    register: true,
+    deletion: true
   });
 
   //обработчики открытия-закрытия попапов с формой
@@ -66,21 +68,26 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setSelectedCard(null);
     setPopupStatusMessage('');
+    setCardForDeletion('')
   }
 
 
   React.useEffect(()=> {
-    Promise.all([api.getUserInfo(), api.getCards()])
-    .then(([userData, cardData]) => {
-      setCurrentUser(userData);
-      setCards(cardData);
-      //console.log('userData',userData)
-      setIsUserDataReceived(true);
-    })
-    .catch(err => {
-      console.log("Ошибка получения данных:", err)
-    })
-  },[])
+    //запросы на получение инфы о юзере и карточках посылаются только когда юзер залогинен
+    //а то тупо как-то впустую запросы слать
+    loggedIn && (
+      Promise.all([api.getUserInfo(), api.getCards()])
+      .then(([userData, cardData]) => {
+        setCurrentUser(userData);
+        setCards(cardData);
+        setIsUserDataReceived(true);
+      })
+      .catch(err => {
+        console.log("Ошибка получения данных:", err)
+      })
+    )
+    
+  },[loggedIn])
 
   //обновление данных пользователя новыми данными из формы редактирования профиля
   function handleUpdateUser(newUserData) {
@@ -158,6 +165,11 @@ function App() {
 
   //колбэк удаления карточки
   function handleCardDelete(card) {
+    //меняем стейт кнопки на ожидание
+    setIsSubmitting(prevState => ({
+      ...prevState,
+      deletion: false
+    }))
     api.deleteCard(card._id)
     .then( () => {
       //оборачиваем setCards в колбек, чтобы удаление карточки со страницы происходило только после возвращения ответа от сервера
@@ -167,12 +179,19 @@ function App() {
           //возвращаем только те карточки, которые не совпадают по id с удаленной
           return item._id !== card._id
       }))
-    }
-
-    )
+      //после успешного удаления карточки закрываем попап
+      closeAllPopups();
+    })
     .catch((err) => {
       console.log("ошибка получения данных", err)
-    });
+    })
+    .finally(() => {
+      //submit status в конце
+      setIsSubmitting(prevState => ({
+        ...prevState,
+        deletion: true
+      }))
+    })
   }
 
   //добавление новой карточки
@@ -329,7 +348,7 @@ function App() {
                 onEditAvatar={handleEditAvatarClick}
                 onCardClick={handleCardClick}
                 onCardLike={handleCardLike}
-                onCardDelete={handleCardDelete}
+                onCardDelete={setCardForDeletion}
                 component={Main}/>
               <EditProfilePopup
                 isOpen={isEditProfilePopupOpen}
@@ -349,7 +368,11 @@ function App() {
               <ImagePopup
                 card={selectedCard}
                 onClose={closeAllPopups}/>
-              <PopupConfirmDeletion />
+              <PopupConfirmDeletion
+              onClose={closeAllPopups}
+              handleCardDelete={handleCardDelete}
+              cardForDeletion={cardForDeletion}
+              isSubmitting={isSubmitting.deletion} />
             </>):(
               <Spinner/>
             )}

@@ -15,7 +15,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete}) {
     onCardLike(card);
   }
   function handleDeleteClick() {
-    onCardDelete(card);
+    onCardDelete(card); 
   }
 
  // Определяем, есть ли у карточки лайк, поставленный текущим пользователем

@@ -1,12 +1,24 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function PopupConfirmDeletion() {
+function PopupConfirmDeletion({ onClose, handleCardDelete, cardForDeletion, isSubmitting }) {
+
+  const submitButtonText = isSubmitting ? 'Да' : 'Удаление...';
+
+  function handleSubmit(evt){
+    evt.preventDefault();
+
+    handleCardDelete(cardForDeletion) 
+  }
   return(
     <PopupWithForm
       name="confirm-deletion"
       title="Вы уверены?"
-      submitText="Да"/>
+      submitText={submitButtonText}
+      isOpen={cardForDeletion} //целый объект перекидываю для true/false результата/ работает но мб память лишнюю жрет такой способ
+      onClose={onClose}
+      onSubmit={handleSubmit}
+      submitButtonState={cardForDeletion} /> 
   )
 }
 
