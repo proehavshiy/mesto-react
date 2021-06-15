@@ -8,3 +8,10 @@
     line-height: 22px;
     color: #FFFFFF;
 }
+
+@media screen and (max-width: 320px) {
+  .header__navBar {
+    height: 142px;
+    order: 1;
+  }
+}

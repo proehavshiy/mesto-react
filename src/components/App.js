@@ -356,70 +356,66 @@ function App() {
       <div className="page">
         <Header
           onSignOut={handleSignOut}
-          email={email}
-          loggedIn={loggedIn} />
+          email={email} />
         <Route exact path="/">
-          {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />} (//если залогинен - отображаем контент или спиннер во время ожидания данных.
-          по-другому не получается сделать корректный редирект с главной страницы)
+          {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
         </Route>
-        <Switch>
+
+        <>
+          <Route path='/sign-up'>
+            <Register
+              onRegister={handleRegister}
+              isSubmitting={isSubmitting.register} />
+          </Route>
+          <Route path='/sign-in'>
+            <Login
+              onLogin={handleLogin}
+              isSubmitting={isSubmitting.login} />
+          </Route>
+          <StatusPopup
+            isOpen={isStatusPopupOpen}
+            onClose={closeAllPopups}
+            popupStatusMessage={popupStatusMessage} />
+        </>
+        {isUserDataReceived &&//если ответ с инфо и карточками не получен - показываем спиннер
           <>
-            <Route path='/sign-up'>
-              <Register
-                onRegister={handleRegister}
-                isSubmitting={isSubmitting.register} />
-            </Route>
-            <Route path='/sign-in'>
-              <Login
-                onLogin={handleLogin}
-                isSubmitting={isSubmitting.login} />
-            </Route>
-            <StatusPopup
-              isOpen={isStatusPopupOpen}
+            <ProtectedRoute
+              path='/'
+              loggedIn={loggedIn}
+              cards={cards}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={setCardForDeletion}
+              component={Main} />
+            <EditProfilePopup
+              isOpen={isEditProfilePopupOpen}
               onClose={closeAllPopups}
-              popupStatusMessage={popupStatusMessage} />
+              onUpdateUser={handleUpdateUser}
+              isSubmitting={isSubmitting.profile} />
+            <EditAvatarPopup
+              isOpen={isEditAvatarPopupOpen}
+              onClose={closeAllPopups}
+              onUpdateAvatar={handleUpdateAvatar}
+              isSubmitting={isSubmitting.avatar} />
+            <AddPlacePopup
+              isOpen={isAddPlacePopupOpen}
+              onClose={closeAllPopups}
+              onAddPlace={handleAddPlace}
+              isSubmitting={isSubmitting.place} />
+            <ImagePopup
+              card={selectedCard}
+              onClose={closeAllPopups} />
+            <PopupConfirmDeletion
+              onClose={closeAllPopups}
+              handleCardDelete={handleCardDelete}
+              cardForDeletion={cardForDeletion}
+              isSubmitting={isSubmitting.deletion} />
           </>
-          {isUserDataReceived ? (//если ответ с инфо и карточками не получен - показываем спиннер
-            <>
-              <ProtectedRoute
-                path='/'
-                loggedIn={loggedIn}
-                cards={cards}
-                onEditProfile={handleEditProfileClick}
-                onAddPlace={handleAddPlaceClick}
-                onEditAvatar={handleEditAvatarClick}
-                onCardClick={handleCardClick}
-                onCardLike={handleCardLike}
-                onCardDelete={setCardForDeletion}
-                component={Main} />
-              <EditProfilePopup
-                isOpen={isEditProfilePopupOpen}
-                onClose={closeAllPopups}
-                onUpdateUser={handleUpdateUser}
-                isSubmitting={isSubmitting.profile} />
-              <EditAvatarPopup
-                isOpen={isEditAvatarPopupOpen}
-                onClose={closeAllPopups}
-                onUpdateAvatar={handleUpdateAvatar}
-                isSubmitting={isSubmitting.avatar} />
-              <AddPlacePopup
-                isOpen={isAddPlacePopupOpen}
-                onClose={closeAllPopups}
-                onAddPlace={handleAddPlace}
-                isSubmitting={isSubmitting.place} />
-              <ImagePopup
-                card={selectedCard}
-                onClose={closeAllPopups} />
-              <PopupConfirmDeletion
-                onClose={closeAllPopups}
-                handleCardDelete={handleCardDelete}
-                cardForDeletion={cardForDeletion}
-                isSubmitting={isSubmitting.deletion} />
-            </>
-          ) : (
-            <Spinner />
-          )}
-        </Switch>
+        }
+
         <Footer />
       </div>
     </CurrentUserContext.Provider>

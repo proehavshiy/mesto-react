@@ -18,7 +18,9 @@
   @import url(./blocks/header/__navBar/header__navBar.css);
   @import url(./blocks/header/header__email.css);
   @import url(./blocks/header/header__link.css);
-  @import url(./blocks/header/header__button.css);
+  @import url(./blocks/header/__button/header__button.css);
+  @import url(./blocks/header/__button/_logout/header__button_logout.css);
+  @import url(./blocks/header/__button/_burger/header__button_burger.css);
   @import url(./blocks/page/__header/page__header.css);
 
   /*блок logo*/

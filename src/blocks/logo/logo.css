@@ -14,3 +14,9 @@
     max-width: 32.41875vw;
   }
 }
+
+@media screen and (max-width: 320px) {
+  .logo {
+    order: 2;
+  }
+}
