@@ -1,28 +1,29 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom'; 
+import { useHistory } from 'react-router-dom';
 
 import Popup from './Popup';
 
 function StatusPopup({ isOpen, onClose, popupStatusMessage }) {
-    const history = useHistory();
-    const checkout = popupStatusMessage === 'Вы успешно зарегистрировались!'
-    const image = checkout ? 'popup__image-status_type_success' : 'popup__image-status_type_reject'
-    function handleClose(){
-        onClose()
-        //редиректим хуком на страницу логина при успешной регистрации
-        checkout && history.push('/sign-in')
-    }
-  return(
+  const history = useHistory();
+  //console.log('popupStatusMessage:', popupStatusMessage);
+  const checkout = popupStatusMessage.errorType === 'success'
+  const image = checkout ? 'popup__image-status_type_success' : 'popup__image-status_type_reject'
+  function handleClose() {
+    onClose()
+    //редиректим хуком на страницу логина при успешной регистрации
+    checkout && history.push('/sign-in')
+  }
+  return (
     <Popup
       name="status"
       isOpen={isOpen}
       onClose={handleClose}>
-        <div className="popup__status">
-            <div className={`popup__image-status ${image}`}></div>
-            <h2 className="popup__heading">
-                {popupStatusMessage}
-            </h2>
-        </div>
+      <div className="popup__status">
+        <div className={`popup__image-status ${image}`}></div>
+        <h2 className="popup__heading">
+          {popupStatusMessage.errorText}
+        </h2>
+      </div>
     </Popup>
   )
 }

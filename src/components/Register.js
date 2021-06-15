@@ -11,8 +11,8 @@ function Register({ onRegister, isSubmitting }) {
   const inputEmailErrorCaption = !input.email || input.email.errorMessage ? 'authentification__input-error_active' : '';
   const emailErrorMessage = input.email && input.email.errorMessage;
 
-  const inputPasswordErrorClass = !input.password || input.password.errorMessage ? 'authentification__input_error'  : '';
-  const inputPasswordErrorCaption = !input.password || input.password.errorMessage ? 'authentification__input-error_active'  : '';
+  const inputPasswordErrorClass = !input.password || input.password.errorMessage ? 'authentification__input_error' : '';
+  const inputPasswordErrorCaption = !input.password || input.password.errorMessage ? 'authentification__input-error_active' : '';
   const passwordErrorMessage = input.password && input.password.errorMessage;
 
   //обработчик инпутов
@@ -26,13 +26,17 @@ function Register({ onRegister, isSubmitting }) {
         valid,
         errorMessage: validationMessage
       }
-      })
+    })
     )
   }
 
   //обработчик формы
   function handleSubmit(evt) {
     evt.preventDefault();
+
+    if (!input.email.value || !input.password.value) {
+      return
+    }
 
     onRegister(input.email.value, input.password.value)
 
@@ -48,7 +52,7 @@ function Register({ onRegister, isSubmitting }) {
   //  }
   //}, [isSubmitting]);
 
-  return(
+  return (
     <AuthWithForm
       name="register"
       title="Регистрация"
@@ -58,15 +62,15 @@ function Register({ onRegister, isSubmitting }) {
       isRegister={true}>
       <fieldset className="authentification__profile-information">
         <section className="authentification__input-section">
-          <input className={`authentification__input authentification__input_email ${inputEmailErrorClass}`} value={input.email ? input.email.value : ''} onChange={handleUserInput} type="email" name="email"  placeholder="Email" required minLength={6} maxLength={30} />
+          <input className={`authentification__input authentification__input_email ${inputEmailErrorClass}`} value={input.email ? input.email.value : ''} onChange={handleUserInput} type="email" name="email" placeholder="Email" required minLength={6} maxLength={30} />
           <span className={`authentification__input-error authentification__input-error_type_email ${inputEmailErrorCaption}`}>
             {emailErrorMessage}
           </span>
         </section>
         <section className="authentification__input-section">
-          <input className={`authentification__input authentification__input_password ${inputPasswordErrorClass}`} value={input.password ? input.password.value : ''} onChange={handleUserInput} type="password" name="password"  placeholder="Пароль" required minLength={6} />
+          <input className={`authentification__input authentification__input_password ${inputPasswordErrorClass}`} value={input.password ? input.password.value : ''} onChange={handleUserInput} type="password" name="password" placeholder="Пароль" required minLength={6} />
           <span className={`authentification__input-error authentification__input-error_type_password ${inputPasswordErrorCaption}`}>
-          {passwordErrorMessage}
+            {passwordErrorMessage}
           </span>
         </section>
       </fieldset>
@@ -76,7 +80,7 @@ function Register({ onRegister, isSubmitting }) {
 
 export default Register;
 
-  
+
 
 /*
 <PopupWithForm
@@ -87,6 +91,6 @@ export default Register;
         onClose={onClose}
         onSubmit={handleAddPlaceSubmit}
         submitButtonState={submitButtonState}>
-        
+
         </PopupWithForm>
 */
