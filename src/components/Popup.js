@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Popup({name, isOpen, onClose, children}) {
+function Popup({ name, isOpen, onClose, children }) {
   const togglePopupState = isOpen ? 'popup__flexed popup_opened' : 'popup__flexed';
 
   //закрытие по крестику, по клику вне формы
@@ -10,13 +10,13 @@ function Popup({name, isOpen, onClose, children}) {
     }
   }
   function handleButtonClose(evt) {
-    if(evt.target === evt.currentTarget) {
+    if (evt.target === evt.currentTarget) {
       onClose()
     }
   }
 
   //закрытие по Esc попапов
-  React.useEffect(()=> {
+  React.useEffect(() => {
     if (!isOpen) return;
 
     const handleEscapeClose = (evt) => {
@@ -24,19 +24,19 @@ function Popup({name, isOpen, onClose, children}) {
         onClose();
       }
     }
-    document.addEventListener('keyup',handleEscapeClose);
+    document.addEventListener('keyup', handleEscapeClose);
     return () => {
       document.removeEventListener('keyup', handleEscapeClose);
     }
-  },[isOpen, onClose]);
+  }, [isOpen, onClose]);
 
- 
-  return(
+
+  return (
     <div className={`popup popup_${name} ${togglePopupState}`} onClick={handleOverlayClose}>
-     <div className={`popup__container popup__container_form popup__container_${name}`}>
-       <button className={`popup__button-close popup__button-close_${name} page__button`} onClick={handleButtonClose} aria-label="Кнопка Закрыть форму" type="button" />
-       {children}
-     </div>
+      <div className={`popup__container popup__container_form popup__container_${name}`}>
+        <button className={`page__button page__button_type_close popup__button-close popup__button-close_${name}`} onClick={handleButtonClose} aria-label="Кнопка Закрыть форму" type="button" />
+        {children}
+      </div>
     </div>
   )
 }

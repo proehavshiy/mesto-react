@@ -1,12 +1,19 @@
 import React from 'react';
-import NavBar from './NavBar';
-import logoPath from '../images/Mesto-logo.svg';
+import { useMediaQuery } from 'react-responsive'
+import HeaderContent from './HeaderContent';
+
 
 function Header({ onSignOut, email }) {
+
+  const isMobile = useMediaQuery({ query: '(max-width: 320px)' })
+  const isDesktop = useMediaQuery({ query: '(min-width: 321px)' })
+
+  //const [isExpandedNav, setIsExpandedNav] = React.useState(false);
+  //console.log('консоль:isExpandedNav', isExpandedNav);
+
   return (
-    <header className="header page__section page__animation page__animation page__header">
-      <img className="logo" src={logoPath} alt="логотип Место" />
-      <NavBar
+    <header className="header page__section page__animation page__header">
+      <HeaderContent
         onSignOut={onSignOut}
         email={email} />
     </header>

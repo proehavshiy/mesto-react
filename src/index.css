@@ -10,6 +10,7 @@
 @import url(./blocks/page/__section/page__section.css);
 @import url(./blocks/page/__animation/page__animation.css);
 @import url(./blocks/page/__button/page__button.css);
+@import url(./blocks/page/__button/_type/page__button_type_close.css);
 /*блок content*/
 @import url(./blocks/content/content.css);
 
@@ -17,11 +18,13 @@
   @import url(./blocks/header/header.css);
   @import url(./blocks/header/__navBar/header__navBar.css);
   @import url(./blocks/header/header__email.css);
-  @import url(./blocks/header/header__link.css);
   @import url(./blocks/header/__button/header__button.css);
   @import url(./blocks/header/__button/_logout/header__button_logout.css);
   @import url(./blocks/header/__button/_burger/header__button_burger.css);
   @import url(./blocks/page/__header/page__header.css);
+  @import url(./blocks/header/__content/header__content.css);
+  @import url(./blocks/header/__main/header__main.css);
+  @import url(./blocks/header/__expanded-nav/header__expanded-nav.css);
 
   /*блок logo*/
   @import url(./blocks/logo/logo.css);

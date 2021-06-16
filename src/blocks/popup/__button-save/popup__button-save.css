@@ -1,28 +1,18 @@
 .popup__button-save {
   margin: 0 auto 37px;
-  padding: 0;
   width: 83.255814%;
   height: 50px;
-  box-sizing: border-box;
-  background: #000000;
+  background-color: #000000;
   border-radius: 2px;
-  color: #FFFFFF;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: normal;
   font-size: 18px;
   line-height: 1.22;
   text-align: center;
-  border: none;
-  -webkit-transition: opacity 0.2s ease;
-  transition: opacity 0.2s ease;
 }
 
 .popup__button-save:hover {
   opacity: 0.8;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-  -webkit-transition: opacity 0.2s ease;
-  transition: opacity 0.2s ease;
 }
 
 .popup__button-save:disabled {
