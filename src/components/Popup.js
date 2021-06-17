@@ -33,8 +33,8 @@ function Popup({ name, isOpen, onClose, children }) {
 
   return (
     <div className={`popup popup_${name} ${togglePopupState}`} onClick={handleOverlayClose}>
-      <div className={`popup__container popup__container_form popup__container_${name}`}>
-        <button className={`page__button page__button_type_close popup__button-close popup__button-close_${name}`} onClick={handleButtonClose} aria-label="Кнопка Закрыть форму" type="button" />
+      <div className={`popup__container popup__container_${name}`}>
+        <button className={`page__button page__button_type_close popup__button-close`} onClick={handleButtonClose} aria-label="Кнопка Закрыть" type="button" />
         {children}
       </div>
     </div>

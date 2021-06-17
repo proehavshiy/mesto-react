@@ -3,14 +3,16 @@ import PopupWithForm from './PopupWithForm';
 
 function PopupConfirmDeletion({ onClose, handleCardDelete, cardForDeletion, isSubmitting }) {
 
+  const theme = 'white';
+
   const submitButtonText = isSubmitting ? 'Да' : 'Удаление...';
 
-  function handleSubmit(evt){
+  function handleSubmit(evt) {
     evt.preventDefault();
 
-    handleCardDelete(cardForDeletion) 
+    handleCardDelete(cardForDeletion)
   }
-  return(
+  return (
     <PopupWithForm
       name="confirm-deletion"
       title="Вы уверены?"
@@ -18,7 +20,8 @@ function PopupConfirmDeletion({ onClose, handleCardDelete, cardForDeletion, isSu
       isOpen={cardForDeletion} //целый объект перекидываю для true/false результата/ работает но мб память лишнюю жрет такой способ
       onClose={onClose}
       onSubmit={handleSubmit}
-      submitButtonState={cardForDeletion} /> 
+      submitButtonState={cardForDeletion}
+      theme={theme} />
   )
 }
 

@@ -4,6 +4,9 @@ import { useHistory } from 'react-router-dom';
 import Popup from './Popup';
 
 function StatusPopup({ isOpen, onClose, popupStatusMessage }) {
+
+  const theme = 'dark';
+
   const history = useHistory();
   //console.log('popupStatusMessage:', popupStatusMessage);
   const checkout = popupStatusMessage.errorType === 'success'
