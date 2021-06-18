@@ -52,7 +52,7 @@ function Login({ onLogin, isSubmitting }) {
       submitButtonState={submitButtonState}
       isRegister={false}
       theme={theme}>
-      <fieldset className="form__profile-information">
+      <fieldset className="form__profile-information form__profile-information_margin">
         <section className="form__input-section">
           <input className={`form__input form__input_theme_${theme} form__input_email ${inputEmailErrorClass}`} value={input.email ? input.email.value : ''} onChange={handleLoginInput} type="email" name="email" placeholder="Email" required minLength={6} maxLength={30} />
           <span className={`form__input-error form__input-error_type_email ${inputEmailErrorCaption}`}>

@@ -1,17 +1,17 @@
 import React from 'react';
 
-function MobileNavBar({ expandNav }) {
+function MobileNavBar({ expandNavBar }) {
   const [menuButton, setMenuButton] = React.useState(false);
 
   function openMenu() {
     setMenuButton(true)
-    expandNav(true)
+    expandNavBar(true)
 
   }
   function closeMenu() {
 
     setMenuButton(false)
-    expandNav(false)
+    expandNavBar(false)
   }
 
   return (

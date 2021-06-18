@@ -1,6 +1,6 @@
-.header__expanded-nav{
+.header__expanded-nav-bar{
   margin: 0 auto;
-  padding-bottom: 40px;
+  padding: 40px 0 40px;
   width: 100%;
   align-self: center;
   display: flex;

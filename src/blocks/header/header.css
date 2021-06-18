@@ -1,6 +1,6 @@
 .header {
   margin: 0 auto;
-  padding: 45px 0 0 0;
+  padding: 0;
   box-sizing: border-box;
   width: 100%;
   display: flex;
@@ -8,11 +8,7 @@
 
 }
 
-@media screen and (max-width: 892px) {
-  .header {
-    padding: 28px 8px 0;
-  }
-}
+
 
 
 

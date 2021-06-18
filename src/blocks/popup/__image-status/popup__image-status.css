@@ -3,3 +3,9 @@
     height: 120px;
     margin-top: 60px;
 }
+
+@media screen and (max-width: 492px){
+  .popup__image-status {
+    margin-top: 50px;
+  }
+}

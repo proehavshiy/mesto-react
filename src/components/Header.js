@@ -12,7 +12,7 @@ function Header({ onSignOut, email }) {
   //console.log('консоль:isExpandedNav', isExpandedNav);
 
   return (
-    <header className="header page__section page__animation page__header">
+    <header className="header page__section page__animation">
       <HeaderContent
         onSignOut={onSignOut}
         email={email} />

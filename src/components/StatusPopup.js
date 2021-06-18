@@ -23,7 +23,7 @@ function StatusPopup({ isOpen, onClose, popupStatusMessage }) {
       onClose={handleClose}>
       <div className="popup__status">
         <div className={`popup__image-status ${image}`}></div>
-        <h2 className="popup__heading">
+        <h2 className="popup__heading popup__heading_status">
           {popupStatusMessage.errorText}
         </h2>
       </div>

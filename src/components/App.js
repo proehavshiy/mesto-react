@@ -413,10 +413,9 @@ function App() {
               handleCardDelete={handleCardDelete}
               cardForDeletion={cardForDeletion}
               isSubmitting={isSubmitting.deletion} />
+            <Footer />
           </>
         }
-
-        <Footer />
       </div>
     </CurrentUserContext.Provider>
   );

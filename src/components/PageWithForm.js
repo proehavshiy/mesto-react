@@ -11,7 +11,7 @@ function PageWithForm({ name, title, submitText, onSubmit, submitButtonState, is
             {title}
           </h2>
           {children}
-          <button className={`page__button form__button-save form__button-save_theme_${theme}`} disabled={!submitButtonState} type="submit" value="Отправить на сервер" aria-label="Кнопка Сохранить форму">
+          <button className={`page__button form__button-save form__button-save_margin form__button-save_theme_${theme}`} disabled={!submitButtonState} type="submit" value="Отправить на сервер" aria-label="Кнопка Сохранить форму">
             {submitText}
           </button>
           {isRegister && (
