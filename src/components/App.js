@@ -263,7 +263,6 @@ function App() {
 
     auth.register(email, password)
       .then(data => {
-        console.log('reg:', data);
         //добавляем успешный месседж для попапа
         if (data) {
           setIsStatusPopupOpen(true);
@@ -365,12 +364,14 @@ function App() {
           <Route path='/sign-up'>
             <Register
               onRegister={handleRegister}
-              isSubmitting={isSubmitting.register} />
+              isSubmitting={isSubmitting.register}
+              serverRequestStatus={popupStatusMessage.errorType} />
           </Route>
           <Route path='/sign-in'>
             <Login
               onLogin={handleLogin}
-              isSubmitting={isSubmitting.login} />
+              isSubmitting={isSubmitting.login}
+              serverRequestStatus={popupStatusMessage.errorType} />
           </Route>
           <StatusPopup
             isOpen={isStatusPopupOpen}

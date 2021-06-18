@@ -11,18 +11,29 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isSubmitting }) {
   const currentUser = React.useContext(CurrentUserContext);
 
   //стейт-переменная для управляемых компонентов формы
-  const [input, setInput] = React.useState({});
+  const [input, setInput] = React.useState({
+    name: {
+      value: '',
+      valid: true,
+      errorMessage: ''
+    },
+    signing: {
+      value: '',
+      valid: true,
+      errorMessage: ''
+    }
+  });
 
-  const submitButtonState = !input.name || !input.signing || !input.name.valid || !input.signing.valid ? false : true;
+  const submitButtonState = !input.name.valid || !input.signing.valid ? false : true;
   const submitButtonText = isSubmitting ? 'Сохранить' : 'Сохранение...';
 
-  const inputNameErrorClass = !input.name || input.name.errorMessage ? 'form__input_error' : '';
-  const inputNameErrorCaption = !input.name || input.name.errorMessage ? 'form__input-error_active' : '';
-  const nameErrorMessage = input.name && input.name.errorMessage;
+  const inputNameErrorClass = input.name.errorMessage ? 'form__input_error' : '';
+  const inputNameErrorCaption = input.name.errorMessage ? 'form__input-error_active' : '';
+  const nameErrorMessage = input.name.errorMessage;
 
-  const inputSigningErrorClass = !input.signing || input.signing.errorMessage ? 'form__input_error' : '';
-  const inputSigningErrorCaption = !input.signing || input.signing.errorMessage ? 'form__input-error_active' : '';
-  const signingErrorMessage = input.signing && input.signing.errorMessage;
+  const inputSigningErrorClass = input.signing.errorMessage ? 'form__input_error' : '';
+  const inputSigningErrorCaption = input.signing.errorMessage ? 'form__input-error_active' : '';
+  const signingErrorMessage = input.signing.errorMessage;
 
   // После загрузки текущего пользователя из API
   // его данные будут использованы в управляемых компонентах.

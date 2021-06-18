@@ -5,19 +5,29 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isSubmitting }) {
 
   const theme = 'white';
 
-  const [input, setInput] = React.useState({});
+  const [input, setInput] = React.useState({
+    location: {
+      value: '',
+      valid: false,
+      errorMessage: ''
+    },
+    link: {
+      value: '',
+      valid: false,
+      errorMessage: ''
+    }
+  });
 
-  const submitButtonState = !input.location || !input.link || !input.location.valid || !input.link.valid ? false : true;
+  const submitButtonState = !input.location.valid || !input.link.valid ? false : true;
   const submitButtonText = isSubmitting ? 'Сохранить' : 'Добавление...';
 
-  const inputTextErrorClass = !input.location || input.location.errorMessage ? 'form__input_error' : '';
-  const inputTextErrorCaption = !input.location || input.location.errorMessage ? 'form__input-error_active' : '';
-  const TextErrorMessage = input.location && input.location.errorMessage;
+  const inputTextErrorClass = input.location.errorMessage ? 'form__input_error' : '';
+  const inputTextErrorCaption = input.location.errorMessage ? 'form__input-error_active' : '';
+  const TextErrorMessage = input.location.errorMessage;
 
-  const inputLinkErrorClass = !input.link || input.link.errorMessage ? 'form__input_error' : '';
-  const inputLinkErrorCaption = !input.link || input.link.errorMessage ? 'form__input-error_active' : '';
-  const LinkErrorMessage = input.link && input.link.errorMessage;
-
+  const inputLinkErrorClass = input.link.errorMessage ? 'form__input_error' : '';
+  const inputLinkErrorCaption = input.link.errorMessage ? 'form__input-error_active' : '';
+  const LinkErrorMessage = input.link.errorMessage;
 
   //обработчик инпутов
   function handleUserInput({ target }) {
@@ -48,7 +58,18 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isSubmitting }) {
     //if нужен для того, чтобы в момент ожидания ответа от сервера
     //кнопка не дизейблилась, и данные инпутов не очищались. так некрасиво
     if (isSubmitting === true) {
-      setInput({});
+      setInput({
+        location: {
+          value: '',
+          valid: false,
+          errorMessage: ''
+        },
+        link: {
+          value: '',
+          valid: false,
+          errorMessage: ''
+        }
+      });
     }
   }, [isSubmitting]);
 
