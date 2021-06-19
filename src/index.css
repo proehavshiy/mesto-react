@@ -15,48 +15,46 @@
 /*блок content*/
 @import url(./blocks/content/content.css);
 
-  /*блок header*/
-  @import url(./blocks/header/header.css);
-  @import url(./blocks/header/__nav-bar/header__nav-bar.css);
-  @import url(./blocks/header/header__email.css);
-  @import url(./blocks/header/__button/header__button.css);
-  @import url(./blocks/header/__button/_logout/header__button_logout.css);
-  @import url(./blocks/header/__button/_burger/header__button_burger.css);
-  @import url(./blocks/header/__content/header__content.css);
-  @import url(./blocks/header/__main/header__main.css);
-  @import url(./blocks/header/__expanded-nav-bar/header__expanded-nav-bar.css);
-
-  /*блок logo*/
-  @import url(./blocks/logo/logo.css);
-  /*блок profile*/
-  @import url(./blocks/profile/profile.css);
-  @import url(./blocks/page/__profile/page__profile.css);
-  @import url(./blocks/profile/__avatar/profile__avatar.css);
-  @import url(./blocks/profile/__info/profile__info.css);
-  @import url(./blocks/profile/__title/profile__title.css);
-  @import url(./blocks/profile/__add-button/profile__add-button.css);
-  @import url(./blocks/profile/__subtitle/profile__subtitle.css);
-  @import url(./blocks/profile/__change-button/profile__change-button.css);
-   /*блок elements*/
-   @import url(./blocks/elements/elements.css);
-   /*блок element*/
-   @import url(./blocks/element/element.css);
-   @import url(./blocks/element/__image/element__image.css);
-   @import url(./blocks/element/__button-delete/element__button-delete.css);
-   @import url(./blocks/element/__figcaption/element__figcaption.css);
-   @import url(./blocks/element/__card-title/element__card-title.css);
-   @import url(./blocks/element/__like-section/element__like-section.css);
-   @import url(./blocks/element/__button-like/element__button-like.css);
-   @import url(./blocks/element/__like-counter/element__like-counter.css);
-   @import url(./blocks/element/__button-like/_active/button-like_active.css);
-   @import url(./blocks/element/__button-like/_disabled/button-like_disabled.css);
+/*блок header*/
+@import url(./blocks/header/header.css);
+@import url(./blocks/header/__nav-bar/header__nav-bar.css);
+@import url(./blocks/header/__email/header__email.css);
+@import url(./blocks/header/__button/header__button.css);
+@import url(./blocks/header/__button/_logout/header__button_logout.css);
+@import url(./blocks/header/__button/_burger/header__button_burger.css);
+@import url(./blocks/header/__content/header__content.css);
+@import url(./blocks/header/__main/header__main.css);
+@import url(./blocks/header/__expanded-nav-bar/header__expanded-nav-bar.css);
+/*блок logo*/
+@import url(./blocks/logo/logo.css);
+/*блок profile*/
+@import url(./blocks/profile/profile.css);
+@import url(./blocks/page/__profile/page__profile.css);
+@import url(./blocks/profile/__avatar/profile__avatar.css);
+@import url(./blocks/profile/__info/profile__info.css);
+@import url(./blocks/profile/__title/profile__title.css);
+@import url(./blocks/profile/__add-button/profile__add-button.css);
+@import url(./blocks/profile/__subtitle/profile__subtitle.css);
+@import url(./blocks/profile/__change-button/profile__change-button.css);
+/*блок elements*/
+@import url(./blocks/elements/elements.css);
+/*блок element*/
+@import url(./blocks/element/element.css);
+@import url(./blocks/element/__image/element__image.css);
+@import url(./blocks/element/__button-delete/element__button-delete.css);
+@import url(./blocks/element/__figcaption/element__figcaption.css);
+@import url(./blocks/element/__card-title/element__card-title.css);
+@import url(./blocks/element/__like-section/element__like-section.css);
+@import url(./blocks/element/__button-like/element__button-like.css);
+@import url(./blocks/element/__like-counter/element__like-counter.css);
+@import url(./blocks/element/__button-like/_active/button-like_active.css);
+@import url(./blocks/element/__button-like/_disabled/button-like_disabled.css);
 /*блок footer*/
 @import url(./blocks/footer/footer.css);
 @import url(./blocks/footer/__copyright/footer__copyright.css);
 
 /*блок popup*/
 @import url(./blocks/popup/popup.css);
-
 @import url(./blocks/popup/__flexed/popup__flexed.css);
 @import url(./blocks/popup/_opened/popup_opened.css);
 @import url(./blocks/popup/__container/popup__container.css);
@@ -76,6 +74,7 @@
 @import url(./blocks/form/_theme/form_theme_dark.css);
 @import url(./blocks/form/_theme/form_theme_white.css);
 @import url(./blocks/form/__heading/form__heading.css);
+@import url(./blocks/form/__heading/_style/form__heading_style.css);
 @import url(./blocks/form/__input-error/form__input-error.css);
 @import url(./blocks/form/__input-error/_active/form__input-error_active.css);
 @import url(./blocks/form/__input-section/form__input-section.css);

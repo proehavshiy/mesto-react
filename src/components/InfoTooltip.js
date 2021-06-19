@@ -8,7 +8,6 @@ function InfoTooltip({ isOpen, onClose, popupStatusMessage }) {
   //const theme = 'dark';
 
   const history = useHistory();
-  //console.log('popupStatusMessage:', popupStatusMessage);
   const checkout = popupStatusMessage.errorType === 'success'
   const image = checkout ? 'popup__image-status_type_success' : 'popup__image-status_type_reject'
   function handleClose() {

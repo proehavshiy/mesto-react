@@ -4,7 +4,7 @@ function DesktopNavBar({ onSignOut, email }) {
   return (
     <>
       <p className="header__email">{email}</p>
-      <button className="header__link header__button header__button_logout page__button" onClick={onSignOut}>Выйти</button>
+      <button className="header__button header__button_logout page__button" onClick={onSignOut}>Выйти</button>
     </>
   );
 }

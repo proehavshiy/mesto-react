@@ -6,14 +6,6 @@
     border-radius: 10px;
     color: #000000;
     width: 430px;
-  background: #FFFFFF;
-  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15)
-
+    background: #FFFFFF;
+    box-shadow: 0px 0px 25px rgb(0 0 0 / 15%);
 }
-
-/* @media screen and (max-width: 492px){
-  .popup__status {
-    max-width: 88.125%;
-  }
-} */
-

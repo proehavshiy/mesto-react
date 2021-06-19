@@ -6,7 +6,7 @@
       opacity: 1;
     }
   }
-  
+
   .page__animation {
     animation: appear .3s ease-in-out;
     animation-fill-mode: both;
