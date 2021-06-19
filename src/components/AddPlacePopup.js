@@ -18,6 +18,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isSubmitting }) {
     }
   });
 
+
   const submitButtonState = !input.location.valid || !input.link.valid ? false : true;
   const submitButtonText = isSubmitting ? 'Сохранить' : 'Добавление...';
 
