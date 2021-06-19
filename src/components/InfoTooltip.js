@@ -1,83 +1,33 @@
 import React from 'react';
-import PopupWithForm from './AuthWithForm';
+import { useHistory } from 'react-router-dom';
 
-function InfoTooltip({ isSubmitting }) {
-  const [inputEmail, setInputEmail] = React.useState({});
-  const [inputPassword, setInputPassword] = React.useState({});
+import Popup from './Popup';
 
-  const submitButtonState = !inputEmail.value || !inputPassword.value || !inputEmail.valid || !inputPassword.valid ? false : true;
-  const submitButtonText = isSubmitting ? 'Войти' : 'Вход...';
+function InfoTooltip({ isOpen, onClose, popupStatusMessage }) {
 
-  const inputEmailErrorClass = inputEmail.errorMessage ? 'popup__input_error' : '';
-  const inputEmailErrorCaption = inputEmail.errorMessage ? 'popup__input-error_active' : '';
+  //const theme = 'dark';
 
-  const inputPasswordErrorClass = inputPassword.errorMessage ? 'popup__input_error'  : '';
-  const inputPasswordErrorCaption = inputPassword.errorMessage ? 'popup__input-error_active'  : '';
-
-  //обработчик инпутов
-  function handleUserInput({ target }) {
-    const { name, value, validity: { valid }, validationMessage } = target;
-
-    if (name === "email") {
-      setInputEmail({
-        value,
-        valid,
-        errorMessage: validationMessage
-      })
-    }
-    if (name === "password") {
-      setInputPassword({
-        value,
-        valid,
-        errorMessage: validationMessage
-      })
-    }
+  const history = useHistory();
+  //console.log('popupStatusMessage:', popupStatusMessage);
+  const checkout = popupStatusMessage.errorType === 'success'
+  const image = checkout ? 'popup__image-status_type_success' : 'popup__image-status_type_reject'
+  function handleClose() {
+    onClose()
+    //редиректим хуком на страницу логина при успешной регистрации
+    checkout && history.push('/sign-in')
   }
-
-  //обработчик формы
-  function handleLoginSubmit(evt) {
-    evt.preventDefault();
-
-    console.log(evt)
-
-    //onAddPlace({
-    //  name: inputText.value,
-    //  link: inputLink.value
-    //})
-  }
-
-  //React.useEffect(() => {
-  //  //сбрасываем поля после отправки формы
-  //  //if нужен для того, чтобы в момент ожидания ответа от сервера
-  //  //кнопка не дизейблилась, и данные инпутов не очищались. так некрасиво
-  //  if(isSubmitting === true) {
-  //    setInputText({});
-  //    setInputLink({});
-  //  }
-  //}, [isSubmitting]);
-
-  return(
-    <PopupWithForm
-      name="login"
-      title="Вход"
-      submitText={submitButtonText}
-      onSubmit={handleLoginSubmit}
-      submitButtonState={submitButtonState}>
-      <fieldset className="popup__profile-information">
-        <section className="popup__input-section">
-          <input className={`popup__input popup__input_email ${inputEmailErrorClass}`} value={inputEmail.value || ''} onChange={handleUserInput} type="email" name="email"  placeholder="Email" required minLength={2} maxLength={30} />
-          <span className={`popup__input-error popup__input-error_type_email ${inputEmailErrorCaption}`}>
-            {inputEmail.errorMessage}
-          </span>
-        </section>
-        <section className="popup__input-section">
-          <input className={`popup__input popup__input_password ${inputPasswordErrorClass}`} value={inputPassword.value || ''} onChange={handleUserInput} type="password" name="password"  placeholder="Пароль" required />
-          <span className={`popup__input-error popup__input-error_type_password ${inputPasswordErrorCaption}`}>
-          {inputPassword.errorMessage}
-          </span>
-        </section>
-      </fieldset>
-      </PopupWithForm>
+  return (
+    <Popup
+      name="status"
+      isOpen={isOpen}
+      onClose={handleClose}>
+      <div className="popup__status">
+        <div className={`popup__image-status ${image}`}></div>
+        <h2 className="popup__heading popup__heading_status">
+          {popupStatusMessage.errorText}
+        </h2>
+      </div>
+    </Popup>
   )
 }
 

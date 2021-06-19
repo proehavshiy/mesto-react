@@ -13,10 +13,11 @@ function HeaderContent({ onSignOut, email }) {
   const isDesktop = useMediaQuery({ query: '(min-width: 481px)' })
 
   const [isExpandedNavBar, setIsExpandedNavBar] = React.useState(false);
+
+  //если разрешение десктопное или перешли на другую страницу, то автоматически скрываем меню
   React.useEffect(() => {
     setIsExpandedNavBar(false);
   }, [isDesktop, location])
-
 
   //в зависимости от текущей страницы и статуса логина отображаем нужные поля
   return (

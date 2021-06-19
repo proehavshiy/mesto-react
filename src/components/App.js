@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 
 import api from '../utils/api';
@@ -16,9 +16,8 @@ import AddPlacePopup from './AddPlacePopup';
 import PopupConfirmDeletion from './PopupConfirmDeletion';
 import Login from './Login';
 import Register from './Register';
-import StatusPopup from './StatusPopup';
+import InfoTooltip from './InfoTooltip';
 import ProtectedRoute from './ProtectedRoute';
-import Spinner from './Spinner';
 
 function App() {
 
@@ -31,7 +30,11 @@ function App() {
   const [email, setEmail] = React.useState('');
   const history = useHistory();
   //стейт для юзеринфо
-  const [currentUser, setCurrentUser] = React.useState(null);
+  const [currentUser, setCurrentUser] = React.useState({
+    name: '',
+    about: '',
+    avatar: ''
+  });
   //проверяем статус получения данных. Если false, не рендерим Main и Footer
   const [isUserDataReceived, setIsUserDataReceived] = React.useState(false);
   //стейт для карточек
@@ -51,7 +54,7 @@ function App() {
     message: '',
   });
 
-  //обработчики открытия-закрытия попапов с формой
+  //колбэк - закрытия попапов с формой
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
   }
@@ -61,7 +64,6 @@ function App() {
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
   }
-  //попап с картинкой
   function handleCardClick(state) {
     setSelectedCard(state);
   }
@@ -79,11 +81,9 @@ function App() {
     // }), 1000);
   }
 
-
   React.useEffect(() => {
-    //запросы на получение инфы о юзере и карточках посылаются только когда юзер залогинен
-    //а то тупо как-то впустую запросы слать
-    loggedIn && (
+    //получаем персональные данные и карточки только когда залогинены
+    if (loggedIn) {
       Promise.all([api.getUserInfo(), api.getCards()])
         .then(([userData, cardData]) => {
           setCurrentUser(userData);
@@ -91,20 +91,20 @@ function App() {
           setIsUserDataReceived(true);
         })
         .catch(err => {
-          console.log("Ошибка получения данных:", err)
+          setIsStatusPopupOpen(true);
+          setErrorMessage(err.status);
         })
-    )
-
+    }
   }, [loggedIn])
 
-  //обновление данных пользователя новыми данными из формы редактирования профиля
+
+  //колбэк - обновление данных пользователя новыми данными из формы редактирования профиля
   function handleUpdateUser(newUserData) {
     //submit status в момент ожидания
     setIsSubmitting(prevState => ({
       ...prevState,
       profile: false
     }))
-
     api.sendUserInfo(newUserData)
       .then((newUserDataFromServer) => {
         //обновляем контекст стейт currentUser после редактирования формы
@@ -112,9 +112,11 @@ function App() {
         closeAllPopups();
       })
       .catch(err => {
-        console.log("Ошибка получения данных:", err)
+        setIsStatusPopupOpen(true);
+        setErrorMessage(err.status);
       })
       .finally(() => {
+        //submit status в финале запроса
         setIsSubmitting(prevState => ({
           ...prevState,
           profile: true
@@ -122,9 +124,8 @@ function App() {
       })
   }
 
-  //обновление аватара новыми данными из формы аватара
+  //колбэк - обновление аватара новыми данными из формы аватара
   function handleUpdateAvatar(newUrl) {
-    //submit status в момент ожидания
     setIsSubmitting(prevState => ({
       ...prevState,
       avatar: false
@@ -136,10 +137,10 @@ function App() {
         closeAllPopups();
       })
       .catch(err => {
-        console.log("Ошибка получения данных:", err)
+        setIsStatusPopupOpen(true);
+        setErrorMessage(err.status);
       })
       .finally(() => {
-        //submit status в конце
         setIsSubmitting(prevState => ({
           ...prevState,
           avatar: true
@@ -147,7 +148,7 @@ function App() {
       })
   }
 
-  //колбэк лайка карточки
+  //колбэк - лайка карточки
   function handleCardLike(activatedCard) {
     //проверяем, есть ли уже лайк на этой карточке
     const isLiked = activatedCard.likes.some(like => like._id === currentUser._id);
@@ -167,13 +168,13 @@ function App() {
         //})
       })
       .catch((err) => {
-        console.log("ошибка лайка", err)
+        setIsStatusPopupOpen(true);
+        setErrorMessage(err.status);
       });
   }
 
-  //колбэк удаления карточки
+  //колбэк - удаления карточки
   function handleCardDelete(card) {
-    //меняем стейт кнопки на ожидание
     setIsSubmitting(prevState => ({
       ...prevState,
       deletion: false
@@ -190,7 +191,8 @@ function App() {
         closeAllPopups();
       })
       .catch((err) => {
-        console.log("ошибка получения данных", err)
+        setIsStatusPopupOpen(true);
+        setErrorMessage(err.status);
       })
       .finally(() => {
         setIsSubmitting(prevState => ({
@@ -200,9 +202,8 @@ function App() {
       })
   }
 
-  //добавление новой карточки
+  //колбэк - добавление новой карточки
   function handleAddPlace(newCardData) {
-    //submit status в момент ожидания
     setIsSubmitting(prevState => ({
       ...prevState,
       place: false
@@ -214,10 +215,10 @@ function App() {
         closeAllPopups();
       })
       .catch(err => {
-        console.log("Ошибка получения данных:", err)
+        setIsStatusPopupOpen(true);
+        setErrorMessage(err.status);
       })
       .finally(() => {
-        //submit status в конце
         setIsSubmitting(prevState => ({
           ...prevState,
           place: true
@@ -225,8 +226,7 @@ function App() {
       })
   }
 
-  //обработчики форм
-
+  //обработчик ошибок ответа сервера
   function setErrorMessage(status) {
     const errorTexts = {
       '400': {
@@ -244,34 +244,44 @@ function App() {
       other: {
         errorType: 'fault',
         errorText: 'Что - то пошло не так! Попробуйте ещё раз.',
+      },
+      serverError: {
+        errorType: 'fault',
+        errorText: 'Сервер не отвечает. Попробуйте позже.',
       }
     }
-
-    setPopupStatusMessage({
-      errorType: errorTexts[status].errorType,
-      errorText: errorTexts[status].errorText,
-    })
+    if (typeof status === "undefined") {
+      setPopupStatusMessage({
+        errorType: errorTexts.other.errorType,
+        errorText: errorTexts.other.errorText,
+      })
+    } else {
+      setPopupStatusMessage({
+        errorType: errorTexts[status].errorType,
+        errorText: errorTexts[status].errorText,
+      })
+    }
   }
 
-  //сабмит регистрации
+  //обработчики форм
+  //колбэк - регистрации
   function handleRegister(email, password) {
-    //меняем стейт кнопки на ожидание
     setIsSubmitting(prevState => ({
       ...prevState,
       register: false
     }))
-
     auth.register(email, password)
       .then(data => {
-        //добавляем успешный месседж для попапа
+        //открываем попап статуса и добавляем успешный месседж для него
         if (data) {
+          setIsLoggedIn(false)
           setIsStatusPopupOpen(true);
           setErrorMessage(201);
         }
       })
       .catch(err => {
         setIsStatusPopupOpen(true);
-        setErrorMessage(err);
+        setErrorMessage(err.status);
       })
       .finally(() => {
         setIsSubmitting(prevState => ({
@@ -281,9 +291,8 @@ function App() {
       })
   }
 
-  //сабмит логина
+  //колбэк - логина
   function handleLogin(email, password) {
-    //меняем стейт кнопки на ожидание
     setIsSubmitting(prevState => ({
       ...prevState,
       login: false
@@ -298,11 +307,12 @@ function App() {
           //запишем емейл для подстановки в шапку, потому что он не подставляется в шапку при входе через логин
           setEmail(email)
           setIsLoggedIn(true);
+          history.push('/');
         }
       })
       .catch(err => {
         setIsStatusPopupOpen(true);
-        setErrorMessage(err);
+        setErrorMessage(err.status);
       })
       .finally(() => {
         setIsSubmitting(prevState => ({
@@ -312,7 +322,7 @@ function App() {
       })
   }
 
-  //разлогиниться
+  //колбэк - разлогиниться
   function handleSignOut() {
     localStorage.removeItem('jwt');
     setIsLoggedIn(false);
@@ -329,12 +339,12 @@ function App() {
             //запишем емейл для подстановки в шапку
             setEmail(res.data.email)
             setIsLoggedIn(true);
-            //history.push('/');
+            history.push('/');
           }
         })
         .catch(err => {
           setIsStatusPopupOpen(true);
-          setErrorMessage(err);
+          setErrorMessage(err.status);
         })
     }
   }
@@ -343,24 +353,13 @@ function App() {
     checkToken()
   }, [])
 
-  React.useEffect(() => {
-    if (loggedIn) {
-      history.push('/');
-    }
-  }, [loggedIn])
-
-
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <Header
           onSignOut={handleSignOut}
           email={email} />
-        <Route exact path="/">
-          {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
-        </Route>
-
-        <>
+        <Switch>
           <Route path='/sign-up'>
             <Register
               onRegister={handleRegister}
@@ -373,12 +372,6 @@ function App() {
               isSubmitting={isSubmitting.login}
               serverRequestStatus={popupStatusMessage.errorType} />
           </Route>
-          <StatusPopup
-            isOpen={isStatusPopupOpen}
-            onClose={closeAllPopups}
-            popupStatusMessage={popupStatusMessage} />
-        </>
-        {isUserDataReceived &&//если ответ с инфо и карточками не получен - показываем спиннер
           <>
             <ProtectedRoute
               path='/'
@@ -390,109 +383,43 @@ function App() {
               onCardClick={handleCardClick}
               onCardLike={handleCardLike}
               onCardDelete={setCardForDeletion}
+              isUserDataReceived={isUserDataReceived}
               component={Main} />
-            <EditProfilePopup
-              isOpen={isEditProfilePopupOpen}
-              onClose={closeAllPopups}
-              onUpdateUser={handleUpdateUser}
-              isSubmitting={isSubmitting.profile} />
-            <EditAvatarPopup
-              isOpen={isEditAvatarPopupOpen}
-              onClose={closeAllPopups}
-              onUpdateAvatar={handleUpdateAvatar}
-              isSubmitting={isSubmitting.avatar} />
-            <AddPlacePopup
-              isOpen={isAddPlacePopupOpen}
-              onClose={closeAllPopups}
-              onAddPlace={handleAddPlace}
-              isSubmitting={isSubmitting.place} />
-            <ImagePopup
-              card={selectedCard}
-              onClose={closeAllPopups} />
-            <PopupConfirmDeletion
-              onClose={closeAllPopups}
-              handleCardDelete={handleCardDelete}
-              cardForDeletion={cardForDeletion}
-              isSubmitting={isSubmitting.deletion} />
-            <Footer />
+            <Route exact path='/'>
+              <EditProfilePopup
+                isOpen={isEditProfilePopupOpen}
+                onClose={closeAllPopups}
+                onUpdateUser={handleUpdateUser}
+                isSubmitting={isSubmitting.profile} />
+              <EditAvatarPopup
+                isOpen={isEditAvatarPopupOpen}
+                onClose={closeAllPopups}
+                onUpdateAvatar={handleUpdateAvatar}
+                isSubmitting={isSubmitting.avatar} />
+              <AddPlacePopup
+                isOpen={isAddPlacePopupOpen}
+                onClose={closeAllPopups}
+                onAddPlace={handleAddPlace}
+                isSubmitting={isSubmitting.place} />
+              <ImagePopup
+                card={selectedCard}
+                onClose={closeAllPopups} />
+              <PopupConfirmDeletion
+                onClose={closeAllPopups}
+                handleCardDelete={handleCardDelete}
+                cardForDeletion={cardForDeletion}
+                isSubmitting={isSubmitting.deletion} />
+              <Footer />
+            </Route>
           </>
-        }
+        </Switch>
+        <InfoTooltip
+          isOpen={isStatusPopupOpen}
+          onClose={closeAllPopups}
+          popupStatusMessage={popupStatusMessage} />
       </div>
     </CurrentUserContext.Provider>
   );
 }
 
 export default App;
-
-
-// return (
-//   <CurrentUserContext.Provider value={currentUser}>
-//     <div className="page">
-//       <Header
-//         onSignOut={onSignOut}
-//         email={email}
-//         loggedIn={loggedIn} />
-//       {loggedIn ? ( //если залогинен - отображаем контент или спиннер
-//         isUserDataReceived ? (//если ответ с инфо и карточками не получен - показываем спиннер
-//           <>
-//             <ProtectedRoute
-//               path='/'
-//               loggedIn={loggedIn}
-//               cards={cards}
-//               onEditProfile={handleEditProfileClick}
-//               onAddPlace={handleAddPlaceClick}
-//               onEditAvatar={handleEditAvatarClick}
-//               onCardClick={handleCardClick}
-//               onCardLike={handleCardLike}
-//               onCardDelete={setCardForDeletion}
-//               component={Main} />
-//             <EditProfilePopup
-//               isOpen={isEditProfilePopupOpen}
-//               onClose={closeAllPopups}
-//               onUpdateUser={handleUpdateUser}
-//               isSubmitting={isSubmitting.profile} />
-//             <EditAvatarPopup
-//               isOpen={isEditAvatarPopupOpen}
-//               onClose={closeAllPopups}
-//               onUpdateAvatar={handleUpdateAvatar}
-//               isSubmitting={isSubmitting.avatar} />
-//             <AddPlacePopup
-//               isOpen={isAddPlacePopupOpen}
-//               onClose={closeAllPopups}
-//               onAddPlace={handleAddPlace}
-//               isSubmitting={isSubmitting.place} />
-//             <ImagePopup
-//               card={selectedCard}
-//               onClose={closeAllPopups} />
-//             <PopupConfirmDeletion
-//               onClose={closeAllPopups}
-//               handleCardDelete={handleCardDelete}
-//               cardForDeletion={cardForDeletion}
-//               isSubmitting={isSubmitting.deletion} />
-//           </>
-//         ) : (
-//           <Spinner />
-//         )
-//       ) : (
-//         <>
-//           <Route path='/sign-up'>
-//             <Register
-//               onRegister={handleRegister}
-//               isSubmitting={isSubmitting.register} />
-//           </Route>
-//           <Route path='/sign-in'>
-//             <Login
-//               onLogin={onLogin}
-//               isSubmitting={isSubmitting.login} />
-//           </Route>
-//           <StatusPopup
-//             isOpen={popupStatusMessage}
-//             onClose={closeAllPopups}
-//             popupStatusMessage={popupStatusMessage} />
-//         </>
-//       )}
-//       <Footer />
-//     </div>
-//   </CurrentUserContext.Provider>
-// );
-// }

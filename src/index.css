@@ -99,13 +99,4 @@
 
 /*блок спиннер*/
 @import url(./blocks/spinner/spinner.css);
-@import url(./blocks/spinner/__part/spinner__part.css);
-@import url(./blocks/spinner/__part/spinner__part_one.css);
-@import url(./blocks/spinner/__part/spinner__part_two.css);
-@import url(./blocks/spinner/__part/spinner__part_three.css);
-@import url(./blocks/spinner/__part/spinner__part_four.css);
-@import url(./blocks/spinner/__part/spinner__part_five.css);
-@import url(./blocks/spinner/__part/spinner__part_six.css);
-@import url(./blocks/spinner/__part/spinner__part_seven.css);
-@import url(./blocks/spinner/__part/spinner__part_eight.css);
-
+@import url(./blocks/spinner/__body/spinner__body.css);

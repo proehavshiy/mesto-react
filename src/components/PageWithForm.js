@@ -26,21 +26,3 @@ function PageWithForm({ name, title, submitText, onSubmit, submitButtonState, is
 }
 
 export default PageWithForm;
-
-
-/*
-  function handleClickClose(evt) {
-    if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__button-close') || (evt.target.classList.contains('popup__button-save'))) {
-      onClose()
-    }
-  }
-
-  import { Link, withRouter } from 'react-router-dom';
-
-  <div className="login__signup">
-          <p>Ещё не зарегистрированы?</p>
-          <Link to="/register" className="signup__link">Зарегистрироваться</Link>
-        </div>
-
-        <a className='page-with-form__link page__button' href='/sign-in'>Войти</a>
-*/
